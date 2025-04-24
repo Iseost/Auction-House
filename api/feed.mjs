@@ -1,10 +1,10 @@
-import { API_SOCIAL_POSTS, API_KEY } from "../constants.mjs";
+import { API_AUCTION_LISTINGS, API_KEY } from "../constants.mjs";
 
 
 export async function getFeed(accessToken) {
     try {
 
-        const response = await fetch(API_SOCIAL_POSTS, {
+        const response = await fetch(API_AUCTION_LISTINGS, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${accessToken}`,

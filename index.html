@@ -6,14 +6,15 @@
     <link rel="stylesheet" href="./src/output.css" />
     <script type="module" src="./auth/auth.mjs"></script>
     <script type="module" src="./api/feed.mjs"></script>
+    <script type="module" src="./js/feed.mjs"></script>
     <script type="module" src="./components/header.mjs"></script>
     <script type="module" src="./components/logout.mjs"></script>
     <title>Feed</title>
   </head>
   <body>
     <header></header>
-    <main>
-      <h1 class="font-playfair">hello world!</h1>
+    <main class="min-h-screen flex items-center justify-center">
+      <div id="post_container" class="grid gap-4"></div>
     </main>
   </body>
 </html>
