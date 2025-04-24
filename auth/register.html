@@ -7,40 +7,52 @@
     <script type="module" src="./auth.mjs"></script>
     <title>Register</title>
   </head>
-  <body>
+  <body class="bg-desert_storm">
     <main>
-      <div>
+      <div class="flex flex-col items-center">
         <img src="/" alt="Logo" />
       </div>
-      <div>
-        <form action="/" method="post">
+      <div class="flex flex-col items-center mt-8">
+        <form class="flex flex-col space-y-4" action="/" method="post">
+          <label for="register_username">Username</label>
           <input
+            class="p-2 border rounded-md"
             type="text"
-            placeholder="Email address"
+            placeholder="Username"
             id="register_username"
           />
-
+          <label for="register_email">Email Address</label>
           <input
+            class="p-2 border rounded-md"
             type="email"
             id="register_email"
             placeholder="name@example.com"
           />
 
+          <label for="register_password">Password</label>
           <input
+            class="p-2 border rounded-md"
             type="password"
             id="register_password"
             placeholder="Password"
           />
-
-          <input
-            type="password"
-            id="register_password_repeat"
-            placeholder="Repeat your password"
-          />
-          <button type="button" id="register_button">Sign up</button>
-          <p id="error_message_registrer" class="message"></p>
+          <button
+            class="bg-white text-Blue_Chill border border-Blue_Chill hover:bg-Blue_Chill hover:text-white hover:scale-105 transition-colors duration-200 py-2 px-4 rounded m-4"
+            type="button"
+            id="register_button"
+          >
+            Sign up
+          </button>
+          <p id="error_message_register" class="text-red-700"></p>
         </form>
-        <p>Already have an account? <a href="./login.html">Sign in here</a></p>
+        <p class="mt-6 block">
+          Already have an account?
+          <a
+            href="./login.html"
+            class="text-Blue_Chill font-medium hover:text-Blue_Chill hover:underline hover:scale-105 transition-all duration-200"
+            >Sign in here</a
+          >
+        </p>
       </div>
     </main>
   </body>

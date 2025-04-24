@@ -1,6 +1,6 @@
 
-import { API_AUTH_LOGIN } from './constants.mjs';
-import { API_AUTH_REGISTER } from './constants.mjs';
+import { API_AUTH_LOGIN } from '../constants.mjs';
+import { API_AUTH_REGISTER } from '../constants.mjs';
 
 export async function register(email, password, name) {
     const data = await fetch(API_AUTH_REGISTER, {
@@ -20,7 +20,7 @@ export async function register(email, password, name) {
         window.location.replace('../index.html');
         alert('Welcome! You will now be sent back to the login.')
     } else {
-        document.getElementById('error_message_reg').textContent = 'Make sure that your email is a stud.noroff mail and your password has 8 character.'
+        document.getElementById('error_message_register').textContent = 'Make sure that your email is a stud.noroff mail and your password has 8 character.'
     }
 
 }

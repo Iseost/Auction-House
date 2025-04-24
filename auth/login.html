@@ -7,20 +7,50 @@
     <script type="module" src="./auth.mjs"></script>
     <title>Sign in</title>
   </head>
-  <body>
+  <body class="bg-desert_storm">
     <main>
-      <div>
+      <div class="flex flex-col items-center">
         <img src="/" alt="Logo" />
       </div>
-      <div>
-        <form method="post" action="/">
-          <input type="email" id="login_mail" placeholder="name@example.com" />
-          <input type="password" id="login_password" placeholder="Password" />
-          <button type="button" id="Login">Sign in</button>
-          <p id="error_message_login" class="message"></p>
+      <div class="flex flex-col items-center mt-8">
+        <form class="flex flex-col space-y-4" method="post" action="/">
+          <label for="login_username">Username</label>
+          <input
+            class="p-2 border rounded-md"
+            type="text"
+            id="login_username"
+            placeholder="Username"
+          />
+          <label for="login_email">Email Address</label>
+          <input
+            class="p-2 border rounded-md"
+            type="email"
+            id="login_email"
+            placeholder="name@example.com"
+          />
+          <label for="login_password">Password</label>
+          <input
+            class="p-2 border rounded-md"
+            type="password"
+            id="login_password"
+            placeholder="Password"
+          />
+          <button
+            class="bg-white text-Blue_Chill border border-Blue_Chill hover:bg-Blue_Chill hover:text-white hover:scale-105 transition-colors duration-200 py-2 px-4 rounded m-4"
+            type="button"
+            id="login"
+          >
+            Sign in
+          </button>
+          <p id="error_message_login" class="text-red-700"></p>
         </form>
-        <p>
-          Don't have an account? <a href="./register.html">Sign up here!</a>
+        <p class="mt-6 block">
+          Don't have an account?
+          <a
+            href="./register.html"
+            class="text-Blue_Chill font-medium hover:text-Blue_Chill hover:underline hover:scale-105 transition-all duration-200"
+            >Sign up here!</a
+          >
         </p>
       </div>
     </main>
