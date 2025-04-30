@@ -15,7 +15,7 @@ function createHeader() {
     feedButton.textContent = 'Feed';
     feedButton.className = 'text-white bg-Blue_Chill px-4 py-2 rounded hover:bg-Blue_Chill/80 transition';
     feedButton.addEventListener('click', () => {
-        window.location.href = '../feed/feed.html';
+        window.location.href = '../index.html';
     });
 
     menu.appendChild(feedButton);

@@ -1,4 +1,4 @@
-export const API_KEY = "febdac82-e442-454f-a77a-012552a2dc6e";
+export const API_KEY = "47191a8f-c4c9-4af5-ba65-ebce40170d87";
 
 export const API_BASE = "https://v2.api.noroff.dev";
 
