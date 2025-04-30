@@ -6,12 +6,15 @@ function applyTailwindClasses(element, classNames) {
 
 let posts = await getFeed(localStorage.getItem("accessToken"));
 
+
+
 export function createPostBox(coverImage, postTitle, postBody, id) {
     const content = document.getElementById("post_container");
 
+
     // Card container
     const card = document.createElement("div");
-    applyTailwindClasses(card, "flex flex-col m-4 p-4 rounded-lg bg-white cursor-pointer max-w-sm ju");
+    applyTailwindClasses(card, "flex flex-col m-4 p-4 rounded-lg bg-white cursor-pointer max-w-sm border border-gray-300 rounded-lg px-4 py-2 focus:outline-none");
 
 
     const postImage = document.createElement("img");
@@ -32,7 +35,7 @@ export function createPostBox(coverImage, postTitle, postBody, id) {
 
     const button = document.createElement("button");
     button.innerText = "Read more";
-    applyTailwindClasses(button, "ml-2 bg-Heliotrope text-white px-4 py-2 rounded");
+    applyTailwindClasses(button, "bg-Heliotrope text-white px-4 py-2 rounded");
 
     button.addEventListener("click", function () {
         window.location.href = `../feed/singlePost.html?id=${id}`;

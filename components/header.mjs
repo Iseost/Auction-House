@@ -46,14 +46,14 @@ function createHeader() {
         menu.appendChild(logoutButton);
     } else {
         const loginButton = document.createElement('button');
-        loginButton.classList = 'login_button ml-2 bg-Blue_Chill text-white px-4 py-2 rounded hover:bg-Heliotrope';
+        loginButton.classList = 'login_button text-white bg-Blue_Chill px-4 py-2 rounded hover:bg-Blue_Chill/80 transition';
         loginButton.textContent = 'Sign in';
         loginButton.addEventListener('click', function () {
             window.location.href = '../auth/login.html';
         });
 
         const registerButton = document.createElement('button');
-        registerButton.classList = 'register_button ml-2 bg-Blue_Chill text-white px-4 py-2 rounded hover:bg-Heliotrope';
+        registerButton.classList = 'register_button text-white bg-Blue_Chill px-4 py-2 rounded hover:bg-Blue_Chill/80 transition';
         registerButton.textContent = 'Sign up';
         registerButton.addEventListener('click', function () {
             window.location.href = '../auth/register.html';
