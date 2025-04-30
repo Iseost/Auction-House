@@ -61,6 +61,8 @@ function createHeader() {
         menu.appendChild(registerButton);
     }
 
+
+
     // RIGHT: Search bar
     const searchForm = document.createElement('form');
     searchForm.classList = 'search-form flex items-center';
