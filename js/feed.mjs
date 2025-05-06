@@ -20,7 +20,7 @@ export function createPostBox(coverImage, postTitle, postBody, id) {
     const postImage = document.createElement("img");
     postImage.src = coverImage || "./src/assets/image.png"; // Fallback image if no coverImage is provided
     applyTailwindClasses(postImage, "w-full h-auto rounded-md");
-
+    postImage.alt = "Post Image";
 
     postImage.addEventListener("click", () => {
         window.location.href = `/`;
@@ -50,6 +50,12 @@ export function createPostBox(coverImage, postTitle, postBody, id) {
     content.appendChild(card);
 }
 
-posts.forEach((post) => {
-    createPostBox(post.media?.url, post.title, post.body, post.id);
-});
+posts = await getFeed();
+console.log(posts); // Verify that posts are fetched
+if (posts && posts.length > 0) {
+    posts.forEach((post) => {
+        createPostBox(post.media?.url, post.title, post.body, post.id);
+    });
+} else {
+    console.log("No posts available.");
+}
