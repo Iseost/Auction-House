@@ -23,7 +23,7 @@ export function createPostBox(coverImage, postTitle, postBody, id) {
     postImage.alt = "Post Image";
 
     postImage.addEventListener("click", () => {
-        window.location.href = `/`;
+        window.location.href = `./feed/post.html?id=${id}`;
     });
 
     const title = document.createElement("h2");
@@ -39,7 +39,7 @@ export function createPostBox(coverImage, postTitle, postBody, id) {
     applyTailwindClasses(button, "bg-Heliotrope text-white px-4 py-2 rounded");
 
     button.addEventListener("click", function () {
-        window.location.href = `../feed/singlePost.html?id=${id}`;
+        window.location.href = `./feed/post.html?id=${id}`;
     });
 
     card.appendChild(postImage);
