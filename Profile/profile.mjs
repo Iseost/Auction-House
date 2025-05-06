@@ -137,17 +137,25 @@ function showCreatePostModal() {
 
 // Handle submit post
 async function handleCreatePost() {
-    const title = document.getElementById("create_title").value.trim();
-    const deadline = document.getElementById("create_deadline").value.trim();
-    const imageURLs = document.getElementById("create_images").value.trim().split("\n");
-    const description = document.getElementById("create_description").value.trim();
+    try {
+        const title = document.getElementById("create_title").value.trim();
+        const deadline = document.getElementById("create_deadline").value.trim();
+        const imageURLs = document.getElementById("create_images").value.trim().split("\n");
+        const description = document.getElementById("create_description").value.trim();
 
-    if (!title || !deadline || !imageURLs.length || !description) {
-        alert("Please fill in all required fields.");
-        return;
+        if (!title || !deadline || !imageURLs.length || !description) {
+            alert("Please fill in all required fields.");
+            return;
+        }
+
+        // Her legger du til API-kall for å sende data
+        console.log("Creating post with:", { title, deadline, imageURLs, description });
+
+    } catch (error) {
+        console.error("Error creating post:", error);
     }
-
 }
+
 
 // Display profile page
 async function displayProfile() {

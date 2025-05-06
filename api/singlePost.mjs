@@ -2,7 +2,7 @@ import { API_AUCTION_LISTINGS, API_KEY } from "../constants.mjs";
 
 export async function getSinglePost(accessToken, postId) {
     try {
-        const data = await fetch(`${API_AUCTION_LISTINGS}/posts/${postId}`, {
+        const data = await fetch(`${API_AUCTION_LISTINGS}/${postId}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${accessToken}`,

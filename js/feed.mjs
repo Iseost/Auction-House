@@ -18,8 +18,9 @@ export function createPostBox(coverImage, postTitle, postBody, id) {
 
 
     const postImage = document.createElement("img");
-    postImage.src = coverImage || "./src/assets/image.png";
+    postImage.src = coverImage || "./src/assets/image.png"; // Fallback image if no coverImage is provided
     applyTailwindClasses(postImage, "w-full h-auto rounded-md");
+
 
     postImage.addEventListener("click", () => {
         window.location.href = `/`;

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="../src/output.css" />
+    <script type="module" src="../api/postActions.mjs"></script>
+    <script type="module" src="../components/header.mjs"></script>
+  </head>
+  <body class="bg-[#F5F5F4] text-[#1F2937] font-['EB_Garamond']">
+    <header></header>
+
+    <main class="min-h-screen px-8 py-12">
+      <h1 class="text-3xl font-bold font-['Playfair_Display'] text-center mb-8">
+        Edit Your Profile
+      </h1>
+
+      <div class="flex justify-center">
+        <form
+          id="editProfileForm"
+          class="flex flex-col items-start w-full max-w-xl space-y-4"
+        >
+          <!-- Name -->
+          <label class="font-medium" for="edit_name">Name</label>
+          <input
+            type="text"
+            id="edit_name"
+            placeholder="Your name"
+            class="w-full border border-gray-300 rounded px-4 py-2"
+            required
+          />
+
+          <!-- Avatar -->
+          <label class="font-medium" for="edit_avatar">Avatar URL</label>
+          <input
+            type="url"
+            id="edit_avatar"
+            placeholder="Enter Avatar URL"
+            class="w-full border border-gray-300 rounded px-4 py-2"
+          />
+
+          <!-- Banner -->
+          <label class="font-medium" for="edit_banner">Banner URL</label>
+          <input
+            type="url"
+            id="edit_banner"
+            placeholder="Enter Banner URL"
+            class="w-full border border-gray-300 rounded px-4 py-2"
+          />
+
+          <!-- Submit button -->
+          <button
+            id="save_edit"
+            type="button"
+            class="bg-[#8B5CF6] text-white py-2 px-4 rounded w-full mt-4 hover:bg-[#7c3aed] transition"
+          >
+            Save Changes
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <footer></footer>
+  </body>
+</html>
