@@ -1,8 +1,8 @@
-import { API_AUCTION_LISTINGS, API_KEY, INCLUDE_BIDS_AND_SELLER } from "../constants.mjs";
+import { API_AUCTION_LISTINGS, API_KEY } from "../constants.mjs";
 
 export async function getSinglePost(accessToken, postId) {
     try {
-        const data = await fetch(`${API_AUCTION_LISTINGS}/${postId}/${INCLUDE_BIDS_AND_SELLER}`, {
+        const data = await fetch(`${API_AUCTION_LISTINGS}/${postId}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${accessToken}`,

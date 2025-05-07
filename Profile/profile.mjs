@@ -1,6 +1,6 @@
 import { getProfile } from "../api/profile.mjs";
 import { showCreatePostModal } from "../postActions/create.mjs";
-import { getUserPosts } from "../api/userPosts.mjs"; // NB: riktig navn her
+import { getUserPosts } from "../api/userPosts.mjs";
 
 function applyTailwindClasses(element, classNames) {
     element.classList.add(...classNames.split(" "));
@@ -23,7 +23,7 @@ async function displayUserPosts(username) {
     postContainer.className = "grid";
 
     try {
-        const posts = await getUserPosts(username); // Bruker riktig funksjon
+        const posts = await getUserPosts(username);
 
         if (posts && posts.length > 0) {
             posts.forEach((post) => {
