@@ -1,6 +1,6 @@
 import { getProfile } from "../api/profile.mjs";
 import { showCreatePostModal } from "../postActions/create.mjs";
-import { getSinglePost } from "../api/singlePost.mjs";
+import { getUserPosts } from "../api/userPosts.mjs"; // NB: riktig navn her
 
 function applyTailwindClasses(element, classNames) {
     element.classList.add(...classNames.split(" "));
@@ -9,7 +9,6 @@ function applyTailwindClasses(element, classNames) {
 const accessToken = localStorage.getItem("accessToken");
 const username = localStorage.getItem("username");
 
-// Display credits globally if logged in
 function displayGlobalCredits() {
     if (!accessToken || !username) return;
 
@@ -18,7 +17,72 @@ function displayGlobalCredits() {
     document.body.insertAdjacentElement("afterbegin", creditsBar);
 }
 
-// Display profile page
+async function displayUserPosts(username) {
+    const postContainer = document.createElement("div");
+    postContainer.id = "post_container";
+    postContainer.className = "grid";
+
+    try {
+        const posts = await getUserPosts(username); // Bruker riktig funksjon
+
+        if (posts && posts.length > 0) {
+            posts.forEach((post) => {
+                const card = document.createElement("div");
+                card.classList.add("card", "p-4", "m-4", "bg-white", "rounded", "shadow");
+
+                const img = document.createElement("img");
+                img.classList.add("card_img", "w-full", "rounded");
+                img.src = post.media?.[0]?.url || "default-post.jpg";
+                img.alt = post.media?.[0]?.alt || "Post image";
+
+                const title = document.createElement("h2");
+                title.textContent = post.title;
+                applyTailwindClasses(title, "text-xl font-semibold mt-2");
+
+                const description = document.createElement("p");
+                description.textContent = post.description;
+                applyTailwindClasses(description, "text-gray-600 mt-1");
+
+                const createdAt = document.createElement("p");
+                createdAt.textContent = `Created: ${new Date(post.created).toLocaleString()}`;
+                applyTailwindClasses(createdAt, "text-xs text-gray-500 mt-2");
+
+                const updatedAt = document.createElement("p");
+                updatedAt.textContent = `Updated: ${new Date(post.updated).toLocaleString()}`;
+                applyTailwindClasses(updatedAt, "text-xs text-gray-500");
+
+                const endsAt = document.createElement("p");
+                endsAt.textContent = `Ends at: ${new Date(post.endsAt).toLocaleString()}`;
+                applyTailwindClasses(endsAt, "text-xs text-red-500 font-medium");
+
+                const bids = document.createElement("p");
+                bids.textContent = `Bids: ${post._count?.bids || 0}`;
+                applyTailwindClasses(bids, "text-sm font-semibold text-blue-800 mt-2");
+
+                card.appendChild(img);
+                card.appendChild(title);
+                card.appendChild(description);
+                card.appendChild(createdAt);
+                card.appendChild(updatedAt);
+                card.appendChild(endsAt);
+                card.appendChild(bids);
+
+                postContainer.appendChild(card);
+            });
+        } else {
+            const noPosts = document.createElement("p");
+            noPosts.textContent = "No posts to display.";
+            applyTailwindClasses(noPosts, "text-gray-500 text-sm m-4");
+            postContainer.appendChild(noPosts);
+        }
+
+        const main = document.querySelector("main");
+        main.appendChild(postContainer);
+    } catch (error) {
+        console.error("Error fetching user posts:", error);
+    }
+}
+
 async function displayProfile() {
     try {
         const queryString = window.location.search;
@@ -30,7 +94,6 @@ async function displayProfile() {
 
         const main = document.querySelector("main");
 
-        // Banner
         const bannerContainer = document.createElement("div");
         applyTailwindClasses(bannerContainer, "banner_container w-full");
 
@@ -41,7 +104,6 @@ async function displayProfile() {
 
         bannerContainer.appendChild(bannerImg);
 
-        // Profile card
         const cardProfile = document.createElement("div");
         applyTailwindClasses(cardProfile, "card_profile flex items-center m-8");
 
@@ -66,131 +128,36 @@ async function displayProfile() {
         cardProfile.appendChild(profileImg);
         cardProfile.appendChild(profileInfo);
 
-        // Buttons
         const buttonContainer = document.createElement("div");
         applyTailwindClasses(buttonContainer, "button_container flex gap-2 my-4 ml-8");
 
-        const editButton = document.createElement("button");
-        applyTailwindClasses(editButton, "edit_button bg-Blue_Chill text-white text-sm px-3 py-1 rounded");
-        editButton.innerText = "Edit Profile";
-        editButton.addEventListener("click", () => {
-            window.location.href = "../profile/edit.html";
-        });
+        if (usernameParam === username) {
+            const editButton = document.createElement("button");
+            applyTailwindClasses(editButton, "edit_button bg-Blue_Chill text-white text-sm px-3 py-1 rounded");
+            editButton.innerText = "Edit Profile";
+            editButton.addEventListener("click", () => {
+                window.location.href = "../profile/edit.html";
+            });
 
-        const createButton = document.createElement("button");
-        applyTailwindClasses(createButton, "create_button bg-Blue_Chill text-white text-sm px-3 py-1 rounded");
-        createButton.innerText = "Create Post";
-        createButton.addEventListener("click", showCreatePostModal);
+            const createButton = document.createElement("button");
+            applyTailwindClasses(createButton, "create_button bg-Blue_Chill text-white text-sm px-3 py-1 rounded");
+            createButton.innerText = "Create Post";
+            createButton.addEventListener("click", showCreatePostModal);
 
-        buttonContainer.appendChild(editButton);
-        buttonContainer.appendChild(createButton);
+            buttonContainer.appendChild(editButton);
+            buttonContainer.appendChild(createButton);
+        }
 
-        // Post container
-        const postContainer = document.createElement("div");
-        postContainer.id = "post_container";
-        postContainer.className = "grid";
-
-        // Append everything
         main.appendChild(bannerContainer);
         main.appendChild(cardProfile);
         main.appendChild(buttonContainer);
-        main.appendChild(postContainer);
+
+        // Hent og vis brukerens poster
+        await displayUserPosts(usernameParam);
     } catch (error) {
         console.error("Error displaying profile:", error);
     }
 }
 
-async function displaySinglePost() {
-    try {
-        // Get postId from URL
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const postId = urlParams.get("postId"); // Retrieve postId from the URL
-
-        if (!postId) {
-            console.error("Post ID is missing in the URL.");
-            return;
-        }
-
-        // Fetch single post data using the postId
-        const singlePost = await getSinglePost(accessToken, postId);
-        const content = document.getElementById("post_container");
-
-        if (!singlePost || singlePost.data.length === 0) {
-            content.innerHTML = "<p>No posts to display</p>";
-            return;
-        }
-
-        singlePost.data.forEach((post) => {
-            // Card container
-            const card = document.createElement("div");
-            applyTailwindClasses(card, "flex flex-col m-4 p-4 rounded-lg bg-white cursor-pointer max-w-2xl border border-gray-300");
-
-            // Post image
-            const img = document.createElement("img");
-            img.src = post.media?.url || "./src/assets/image.png"; // Fallback image if no coverImage is provided
-            applyTailwindClasses(img, "w-full h-auto rounded-md");
-            img.alt = "Post Image";
-
-            // Title
-            const title = document.createElement("h2");
-            title.textContent = post.title;
-            applyTailwindClasses(title, "text-2xl font-semibold mt-4");
-
-            // Post body
-            const body = document.createElement("p");
-            body.textContent = post.body;
-            applyTailwindClasses(body, "text-gray-600 mt-2 text-sm");
-
-            // Bid button
-            const bidButton = document.createElement("button");
-            bidButton.textContent = "Place Bid";
-            applyTailwindClasses(bidButton, "bg-Heliotrope text-white px-4 py-2 rounded mt-4");
-            bidButton.addEventListener("click", () => {
-                console.log(`Bid clicked for post ID ${post.id}`);
-            });
-
-            // Bid history container
-            const bidHistoryContainer = document.createElement("div");
-            applyTailwindClasses(bidHistoryContainer, "mt-4");
-
-            const bidHistoryTitle = document.createElement("h3");
-            bidHistoryTitle.textContent = "Bidding History";
-            applyTailwindClasses(bidHistoryTitle, "text-lg font-semibold");
-
-            const bidList = document.createElement("ul");
-            if (post.bids && post.bids.length > 0) {
-                post.bids.forEach((bid) => {
-                    const bidItem = document.createElement("li");
-                    bidItem.textContent = `User: ${bid.bidderName || 'Anonymous'}, Amount: ${bid.amount}`;
-                    applyTailwindClasses(bidItem, "mt-2 text-sm text-gray-700");
-                    bidList.appendChild(bidItem);
-                });
-            } else {
-                const noBids = document.createElement("p");
-                noBids.textContent = "No bids yet.";
-                applyTailwindClasses(noBids, "mt-2 text-sm text-gray-600");
-                bidHistoryContainer.appendChild(noBids);
-            }
-
-            // Append everything to the card
-            bidHistoryContainer.appendChild(bidHistoryTitle);
-            bidHistoryContainer.appendChild(bidList);
-            card.appendChild(img);
-            card.appendChild(title);
-            card.appendChild(body);
-            card.appendChild(bidButton);
-            card.appendChild(bidHistoryContainer);
-
-            // Append the card to the content
-            content.appendChild(card);
-        });
-    } catch (error) {
-        console.error("Error displaying single post:", error);
-    }
-}
-
-// Call the display function to show the single post based on the postId in the URL
-displaySinglePost();
 displayGlobalCredits();
 await displayProfile();

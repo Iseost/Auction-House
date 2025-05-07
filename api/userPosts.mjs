@@ -1,24 +1,22 @@
 import { API_AUCTION_LISTINGS, API_KEY, INCLUDE_BIDS_AND_SELLER } from "../constants.mjs";
 
-export async function getSinglePost(accessToken, postId) {
+export async function getUserPosts(username, accessToken) {
     try {
-        const data = await fetch(`${API_AUCTION_LISTINGS}/${postId}/${INCLUDE_BIDS_AND_SELLER}`, {
+        const response = await fetch(`${API_AUCTION_LISTINGS}/${username}/${INCLUDE_BIDS_AND_SELLER}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 "Content-Type": "application/json",
                 "X-Noroff-API-Key": API_KEY,
             },
-
         });
 
-        if (data.status !== 200) {
-            throw new Error(`Failed to fetch post. Status: ${data.status}`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch user posts: ${response.status}`);
         }
 
-        return await data.json();
+        return await response.json();
     } catch (error) {
-        console.error("Error fetching post:", error);
+        console.error("Error fetching user posts:", error);
     }
-
 }

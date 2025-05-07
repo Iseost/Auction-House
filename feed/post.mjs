@@ -1,53 +1,84 @@
 import { getSinglePost } from "../api/singlePost.mjs";
 
-const urlParams = new URLSearchParams(window.location.search);
-const postId = urlParams.get('id');
-
-// Check if postId exists in the URL
-if (postId) {
+import { applyTailwindClasses } from "../utils/tailwind.mjs";
+async function displaySinglePost() {
     try {
-        let post = await getSinglePost(localStorage.getItem("accessToken"), postId);
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const postId = urlParams.get("postId");
 
-        if (post) {
-            function createSinglePost(coverImage, postTitle, postBody) {
-                const content = document.getElementById("post_container");
-
-                // image
-                const card = document.createElement("div");
-                card.classList.add("card");
-                card.classList.add("flex");
-
-                const postImage = document.createElement("img");
-                postImage.src = coverImage;
-                postImage.classList.add("cover");
-
-                card.appendChild(postImage);
-
-                // Title, text and button
-                const title = document.createElement("h2");
-                title.classList.add('cover_text');
-                title.innerText = postTitle;
-
-                const smallText = document.createElement("p");
-                smallText.classList.add("cover_small_text");
-                smallText.innerText = postBody;
-
-                card.appendChild(title);
-                card.appendChild(smallText);
-
-                content.appendChild(card);
-            }
-
-            // Use the correct fallback for media URL
-            createSinglePost(post.media?.url || post.title, post.body);
-        } else {
-            console.error("Post not found");
+        if (!postId) {
+            console.error("Post ID is missing in the URL.");
+            return;
         }
+
+        const accessToken = "your_access_token_here"; // Replace with actual token or fetch dynamically
+        const post = await getSinglePost(accessToken, postId);
+        const content = document.getElementById("post_container");
+
+        if (!post) {
+            content.innerHTML = "<p>No post to display</p>";
+            return;
+        }
+
+        // Card container
+        const card = document.createElement("div");
+        applyTailwindClasses(card, "flex flex-col m-4 p-4 rounded-lg bg-white cursor-pointer max-w-2xl border border-gray-300");
+
+        const img = document.createElement("img");
+        img.src = post.media?.url || "./src/assets/image.png";
+        applyTailwindClasses(img, "w-full h-auto rounded-md");
+        img.alt = "Post Image";
+
+        const title = document.createElement("h2");
+        title.textContent = post.title;
+        applyTailwindClasses(title, "text-2xl font-semibold mt-4");
+
+        const body = document.createElement("p");
+        body.textContent = post.body;
+        applyTailwindClasses(body, "text-gray-600 mt-2 text-sm");
+
+        const bidButton = document.createElement("button");
+        bidButton.textContent = "Place Bid";
+        applyTailwindClasses(bidButton, "bg-Heliotrope text-white px-4 py-2 rounded mt-4");
+        bidButton.addEventListener("click", () => {
+            console.log(`Bid clicked for post ID ${post.id}`);
+        });
+
+        const bidHistoryContainer = document.createElement("div");
+        applyTailwindClasses(bidHistoryContainer, "mt-4");
+
+        const bidHistoryTitle = document.createElement("h3");
+        bidHistoryTitle.textContent = "Bidding History";
+        applyTailwindClasses(bidHistoryTitle, "text-lg font-semibold");
+
+        const bidList = document.createElement("ul");
+        if (post.bids && post.bids.length > 0) {
+            post.bids.forEach((bid) => {
+                const bidItem = document.createElement("li");
+                bidItem.textContent = `User: ${bid.bidderName || 'Anonymous'}, Amount: ${bid.amount}`;
+                applyTailwindClasses(bidItem, "mt-2 text-sm text-gray-700");
+                bidList.appendChild(bidItem);
+            });
+        } else {
+            const noBids = document.createElement("p");
+            noBids.textContent = "No bids yet.";
+            applyTailwindClasses(noBids, "mt-2 text-sm text-gray-600");
+            bidHistoryContainer.appendChild(noBids);
+        }
+
+        bidHistoryContainer.appendChild(bidHistoryTitle);
+        bidHistoryContainer.appendChild(bidList);
+        card.appendChild(img);
+        card.appendChild(title);
+        card.appendChild(body);
+        card.appendChild(bidButton);
+        card.appendChild(bidHistoryContainer);
+
+        content.appendChild(card);
     } catch (error) {
-        console.error("Error fetching post:", error);
+        console.error("Error displaying single post:", error);
     }
-} else {
-    console.error("Post ID not found in URL");
-    // Optionally, redirect or display a message to the user
-    // window.location.href = "/error-page.html"; // Redirect to a custom error page
 }
+
+displaySinglePost();
