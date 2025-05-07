@@ -1,9 +1,9 @@
 import { getSinglePost } from "../api/singlePost.mjs";
 
-
 function applyTailwindClasses(element, classes) {
     element.className = classes;
 }
+
 async function displaySinglePost() {
     try {
         const queryString = window.location.search;
@@ -25,100 +25,121 @@ async function displaySinglePost() {
         }
 
         const card = document.createElement("div");
-        applyTailwindClasses(card, "flex flex-col m-4 p-4 rounded-lg bg-white cursor-pointer max-w-2xl border border-gray-300");
+        applyTailwindClasses(card, "max-w-3xl mx-auto bg-white dark:bg-darkBG rounded-lg shadow-md overflow-hidden mt-8");
 
-        // Media (image)
+        // Media
         const img = document.createElement("img");
         img.src = post.media?.[0]?.url || "../src/assets/image.png";
-        img.alt = post.media?.[0]?.alt || "Post Image";
-        applyTailwindClasses(img, "w-full h-auto rounded-md");
+        img.alt = post.media?.[0]?.alt || "Post image";
+        applyTailwindClasses(img, "w-full h-64 object-cover");
+
+        // Content container
+        const container = document.createElement("div");
+        applyTailwindClasses(container, "p-6 space-y-4");
+
+        // Profile section
+        const profile = document.createElement("div");
+        applyTailwindClasses(profile, "flex items-center justify-between");
+
+        const user = document.createElement("div");
+        applyTailwindClasses(user, "flex items-center gap-3");
+
+        const avatar = document.createElement("img");
+        avatar.src = post.seller?.avatar || "../src/assets/avatar.png";
+        avatar.alt = post.seller?.name || "User avatar";
+        applyTailwindClasses(avatar, "w-10 h-10 rounded-full");
+
+        const username = document.createElement("span");
+        username.textContent = post.seller?.name || "Unknown";
+        applyTailwindClasses(username, "font-medium text-gray-900 dark:text-white");
+
+        user.appendChild(avatar);
+        user.appendChild(username);
+
+        const date = document.createElement("p");
+        date.textContent = new Date(post.created).toLocaleDateString();
+        applyTailwindClasses(date, "text-sm text-gray-500");
+
+        profile.appendChild(user);
+        profile.appendChild(date);
 
         // Title
-        const title = document.createElement("h2");
+        const title = document.createElement("h1");
         title.textContent = post.title;
-        applyTailwindClasses(title, "text-2xl font-semibold mt-4");
+        applyTailwindClasses(title, "text-2xl font-bold text-gray-900 dark:text-white");
 
-        // Description/body
-        const description = document.createElement("p");
-        description.textContent = post.description || post.body || "No description available.";
-        applyTailwindClasses(description, "text-gray-600 mt-2 text-sm");
+        // Description
+        const body = document.createElement("p");
+        body.textContent = post.description || post.body || "No description.";
+        applyTailwindClasses(body, "text-gray-700 dark:text-gray-300");
 
-        // Tags
-        const tags = document.createElement("p");
-        tags.textContent = post.tags && post.tags.length > 0 ? `Tags: ${post.tags.join(", ")}` : "No tags";
-        applyTailwindClasses(tags, "text-sm text-gray-500 mt-2");
+        // Auction info
+        const auction = document.createElement("div");
+        applyTailwindClasses(auction, "mt-4 space-y-1");
 
-        // Created date
-        const created = document.createElement("p");
-        created.textContent = `Created: ${new Date(post.created).toLocaleString()}`;
-        applyTailwindClasses(created, "text-sm text-gray-500 mt-2");
-
-        // Updated date
-        const updated = document.createElement("p");
-        updated.textContent = `Last updated: ${new Date(post.updated).toLocaleString()}`;
-        applyTailwindClasses(updated, "text-sm text-gray-500");
-
-        // Ends at (auction end)
         const endsAt = document.createElement("p");
-        endsAt.textContent = `Auction ends: ${new Date(post.endsAt).toLocaleString()}`;
-        applyTailwindClasses(endsAt, "text-sm text-red-500 font-semibold mt-2");
+        endsAt.innerHTML = `<strong>Auction Ends:</strong> ${new Date(post.endsAt).toLocaleDateString()}`;
 
-        // Total number of bids
-        const bidCount = document.createElement("p");
-        bidCount.textContent = `Total bids: ${post._count?.bids ?? 0}`;
-        applyTailwindClasses(bidCount, "text-sm text-indigo-600 font-medium mt-2");
+        const endsIn = document.createElement("p");
+        const timeLeft = new Date(post.endsAt) - new Date();
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+        const mins = Math.floor((timeLeft / (1000 * 60)) % 60);
+        const secs = Math.floor((timeLeft / 1000) % 60);
+        endsIn.textContent = `${days}d ${hours}h ${mins}m ${secs}s`;
 
-        // Bid button
-        const bidButton = document.createElement("button");
-        bidButton.textContent = "Place Bid";
-        applyTailwindClasses(bidButton, "bg-Heliotrope text-white px-4 py-2 rounded mt-4");
-        bidButton.addEventListener("click", () => {
-            console.log(`Bid clicked for post ID ${post.id}`);
-        });
+        applyTailwindClasses(endsAt, "text-sm text-gray-600 dark:text-gray-400");
+        applyTailwindClasses(endsIn, "text-sm text-gray-600 dark:text-gray-400");
 
-        // Bidding history
-        const bidHistoryContainer = document.createElement("div");
-        applyTailwindClasses(bidHistoryContainer, "mt-4");
+        // Bidding area
+        const bidding = document.createElement("div");
+        applyTailwindClasses(bidding, "flex flex-col md:flex-row justify-between items-center gap-4 mt-6");
 
-        const bidHistoryTitle = document.createElement("h3");
-        bidHistoryTitle.textContent = "Bidding History";
-        applyTailwindClasses(bidHistoryTitle, "text-lg font-semibold");
+        const currentBid = document.createElement("p");
+        currentBid.textContent = `Current bid: ${post.bids?.[0]?.amount || 0} 🪙`;
+        applyTailwindClasses(currentBid, "text-md text-gray-800 dark:text-white");
 
-        const bidList = document.createElement("ul");
-        if (post.bids && post.bids.length > 0) {
-            post.bids.forEach((bid) => {
-                const bidItem = document.createElement("li");
-                const date = new Date(bid.created).toLocaleString();
-                bidItem.textContent = `User: ${bid.bidderName || 'Anonymous'}, Amount: ${bid.amount}, Date: ${date}`;
-                applyTailwindClasses(bidItem, "mt-2 text-sm text-gray-700");
-                bidList.appendChild(bidItem);
-            });
-        } else {
-            const noBids = document.createElement("p");
-            noBids.textContent = "No bids yet.";
-            applyTailwindClasses(noBids, "mt-2 text-sm text-gray-600");
-            bidHistoryContainer.appendChild(noBids);
-        }
+        const form = document.createElement("form");
+        applyTailwindClasses(form, "flex items-center gap-2");
 
-        // Append everything
-        bidHistoryContainer.appendChild(bidHistoryTitle);
-        bidHistoryContainer.appendChild(bidList);
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = 1;
+        input.placeholder = "Bid Me 🪙";
+        applyTailwindClasses(input, "border rounded px-3 py-1 text-sm");
+
+        const bidBtn = document.createElement("button");
+        bidBtn.type = "submit";
+        bidBtn.textContent = "Bid Me";
+        applyTailwindClasses(bidBtn, "bg-allports text-white px-4 py-2 rounded");
+
+        form.appendChild(input);
+        form.appendChild(bidBtn);
+
+        // View Bids Button
+        const viewBtn = document.createElement("button");
+        viewBtn.textContent = "View Bids";
+        applyTailwindClasses(viewBtn, "bg-allports text-white px-4 py-2 rounded");
+
+        bidding.appendChild(currentBid);
+        bidding.appendChild(form);
+        bidding.appendChild(viewBtn);
+
+        // Append all to container
+        container.appendChild(profile);
+        container.appendChild(title);
+        container.appendChild(body);
+        container.appendChild(auction);
+        auction.appendChild(endsAt);
+        auction.appendChild(endsIn);
+        container.appendChild(bidding);
+
         card.appendChild(img);
-        card.appendChild(title);
-        card.appendChild(description);
-        card.appendChild(tags);
-        card.appendChild(created);
-        card.appendChild(updated);
-        card.appendChild(endsAt);
-        card.appendChild(bidCount);
-        card.appendChild(bidButton);
-        card.appendChild(bidHistoryContainer);
-
+        card.appendChild(container);
         content.appendChild(card);
     } catch (error) {
         console.error("Error displaying single post:", error);
     }
 }
-
 
 displaySinglePost();
