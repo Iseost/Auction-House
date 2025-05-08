@@ -1,13 +1,10 @@
-import { getFeed } from "../api/feed.mjs";
+import { formatDate, auctionTimeLeft } from "../components/timer.mjs";
 
 function applyTailwindClasses(element, classNames) {
     element.classList.add(...classNames.split(" "));
 }
 
-const posts = await getFeed(localStorage.getItem("accessToken"));
-console.log(posts); // Debug
-
-export function createPostBox(coverImage, postTitle, postBody, id) {
+export function createPostBox(coverImage, postTitle, postBody, id, endsAt) {
     const content = document.getElementById("post_container");
 
     const card = document.createElement("div");
@@ -34,6 +31,13 @@ export function createPostBox(coverImage, postTitle, postBody, id) {
     smallText.innerText = postBody;
     applyTailwindClasses(smallText, "text-gray-600 mt-2 text-sm line-clamp-2 border-b border-darkFaded dark:border-whiteFaded pb-2");
 
+    const endDate = document.createElement("p");
+    endDate.innerText = `Ends: ${formatDate(endsAt)}`;
+    applyTailwindClasses(endDate, "text-xs text-gray-500 mt-1");
+
+    const timer = auctionTimeLeft(endsAt);
+    applyTailwindClasses(timer, "text-sm text-red-600 mt-2");
+
     const button = document.createElement("button");
     button.innerText = "Read more";
     applyTailwindClasses(button, "mt-3 bg-Heliotrope text-white px-4 py-2 rounded hover:opacity-90 transition-opacity duration-200");
@@ -41,20 +45,6 @@ export function createPostBox(coverImage, postTitle, postBody, id) {
         window.location.href = `./feed/post.html?postId=${id}`;
     });
 
-    card.append(imageContainer, title, smallText, button);
+    card.append(imageContainer, title, smallText, endDate, timer, button);
     content.appendChild(card);
-}
-
-
-if (posts && posts.length > 0) {
-    posts.forEach((post) => {
-        createPostBox(
-            post.media?.[0]?.url,
-            post.title,
-            post.description,
-            post.id
-        );
-    });
-} else {
-    console.log("No posts available.");
 }
