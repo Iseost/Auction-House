@@ -87,10 +87,13 @@ function createHeader() {
         e.preventDefault();
         const query = searchInput.value.trim();
         if (query) {
-            window.location.href = `../components/search.html?q=${encodeURIComponent(query)}`;
-
+            const searchEvent = new CustomEvent('search', {
+                detail: { query }
+            });
+            document.dispatchEvent(searchEvent);
         }
     });
+
 
     // LEFT: Hamburger Button
     const burgerButton = document.createElement('button');
