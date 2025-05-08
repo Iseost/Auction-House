@@ -14,7 +14,25 @@
   </head>
   <body>
     <header></header>
-    <main class="min-h-screen flex items-center justify-center">
+    <main class="min-h-screen px-4 pt-4">
+      <div id="feedImageWrapper" class="mb-6 flex justify-center">
+        <img
+          id="feedImage"
+          src="./src/assets/ChatGPT Image 30. apr. 2025, 22_23_45.png"
+          alt="Feed banner"
+          class="mx-auto mb-6 px-4 py-2 rounded shadow-lg"
+        />
+      </div>
+
+      <div>
+        <button
+          id="clearSearch"
+          class="hidden top-4 left-4 bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition"
+        >
+          Vis alle innlegg
+        </button>
+      </div>
+
       <div
         id="post_container"
         class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
