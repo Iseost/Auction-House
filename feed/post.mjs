@@ -1,4 +1,5 @@
 import { getSinglePost } from "../api/singlePost.mjs";
+import { onPlaceBid } from "../postActions/placeBid.mjs";
 
 function applyTailwindClasses(element, classes) {
     element.className = classes;
@@ -92,15 +93,19 @@ async function displaySinglePost() {
         applyTailwindClasses(endsIn, "text-sm text-gray-600 dark:text-gray-400");
 
         // Bidding area
+        // Bidding area
         const bidding = document.createElement("div");
-        applyTailwindClasses(bidding, "flex flex-col md:flex-row justify-between items-center gap-4 mt-6");
+        applyTailwindClasses(bidding, "mt-4 space-y-2");
 
         const currentBid = document.createElement("p");
-        currentBid.textContent = `Current bid: ${post.bids?.[0]?.amount || 0} 🪙`;
-        applyTailwindClasses(currentBid, "text-md text-gray-800 dark:text-white");
+        currentBid.textContent = `Current Bid: ${post.currentBid || "No bids yet"}`;
+        applyTailwindClasses(currentBid, "text-sm text-gray-600 dark:text-gray-400");
 
         const form = document.createElement("form");
         applyTailwindClasses(form, "flex items-center gap-2");
+
+        // Legg til event listener for å bruke onPlaceBid
+        form.addEventListener("submit", onPlaceBid);
 
         const input = document.createElement("input");
         input.type = "number";
@@ -115,6 +120,7 @@ async function displaySinglePost() {
 
         form.appendChild(input);
         form.appendChild(bidBtn);
+
 
         // View Bids Button
         const viewBtn = document.createElement("button");
