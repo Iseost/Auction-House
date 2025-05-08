@@ -87,7 +87,8 @@ function createHeader() {
         e.preventDefault();
         const query = searchInput.value.trim();
         if (query) {
-            window.location.href = `../feed/search.html?q=${encodeURIComponent(query)}`;
+            window.location.href = `../components/search.html?q=${encodeURIComponent(query)}`;
+
         }
     });
 
