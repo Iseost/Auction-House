@@ -10,7 +10,7 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     const card = document.createElement("div");
     applyTailwindClasses(card, "flex flex-col m-4 p-4 rounded-xl bg-white border border-darkFaded hover:shadow-xl transition-shadow duration-300 cursor-pointer max-w-sm overflow-hidden");
 
-    // 🔹 Header med avatar og opprettelsesdato
+
     const header = document.createElement("div");
     applyTailwindClasses(header, "flex justify-between items-center mb-2");
 
@@ -18,7 +18,7 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     applyTailwindClasses(profile, "flex items-center gap-2");
 
     const avatarImg = document.createElement("img");
-    avatarImg.src = avatar || "./src/assets/avatar-placeholder.png";
+    avatarImg.src = avatar || "./src/assets/image.png";
     avatarImg.alt = `${sellerName || "User"}'s avatar`;
     applyTailwindClasses(avatarImg, "w-8 h-8 rounded-full object-cover");
 
@@ -70,7 +70,6 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
         window.location.href = `./feed/post.html?postId=${id}`;
     });
 
-    // 👇 Append i riktig rekkefølge
     card.append(header, imageContainer, title, smallText, endDate, timer, button);
     content.appendChild(card);
 }
