@@ -10,7 +10,10 @@ if (posts && posts.length > 0) {
             post.title,
             post.description,
             post.id,
-            post.endsAt
+            post.endsAt,
+            post.seller?.avatar,
+            post.seller?.name,
+            post.created
         );
     });
 } else {

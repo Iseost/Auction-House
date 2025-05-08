@@ -4,12 +4,37 @@ function applyTailwindClasses(element, classNames) {
     element.classList.add(...classNames.split(" "));
 }
 
-export function createPostBox(coverImage, postTitle, postBody, id, endsAt) {
+export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avatar, sellerName, created) {
     const content = document.getElementById("post_container");
 
     const card = document.createElement("div");
     applyTailwindClasses(card, "flex flex-col m-4 p-4 rounded-xl bg-white border border-darkFaded hover:shadow-xl transition-shadow duration-300 cursor-pointer max-w-sm overflow-hidden");
 
+    // 🔹 Header med avatar og opprettelsesdato
+    const header = document.createElement("div");
+    applyTailwindClasses(header, "flex justify-between items-center mb-2");
+
+    const profile = document.createElement("div");
+    applyTailwindClasses(profile, "flex items-center gap-2");
+
+    const avatarImg = document.createElement("img");
+    avatarImg.src = avatar || "./src/assets/avatar-placeholder.png";
+    avatarImg.alt = `${sellerName || "User"}'s avatar`;
+    applyTailwindClasses(avatarImg, "w-8 h-8 rounded-full object-cover");
+
+    const name = document.createElement("span");
+    name.innerText = sellerName || "Unknown";
+    applyTailwindClasses(name, "text-sm font-medium text-gray-800");
+
+    profile.append(avatarImg, name);
+
+    const createdDate = document.createElement("span");
+    createdDate.innerText = formatDate(created);
+    applyTailwindClasses(createdDate, "text-xs text-gray-500");
+
+    header.append(profile, createdDate);
+
+    // 🔹 Resten av kortet
     const imageContainer = document.createElement("div");
     applyTailwindClasses(imageContainer, "flex items-center justify-center w-full max-h-[200px] sm:max-h-[240px] h-full cursor-pointer overflow-hidden drop-shadow-darkFaded");
 
@@ -45,6 +70,8 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt) {
         window.location.href = `./feed/post.html?postId=${id}`;
     });
 
-    card.append(imageContainer, title, smallText, endDate, timer, button);
+    // 👇 Append i riktig rekkefølge
+    card.append(header, imageContainer, title, smallText, endDate, timer, button);
     content.appendChild(card);
 }
+
