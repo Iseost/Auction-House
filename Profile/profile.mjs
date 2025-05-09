@@ -2,12 +2,13 @@ import { getProfile } from "../api/profile.mjs";
 import { showCreatePostModal } from "../postActions/create.mjs";
 import { getUserPosts } from "../api/userPosts.mjs";
 
+// Hent brukerdata fra localStorage
+const accessToken = localStorage.getItem("accessToken");
+const username = localStorage.getItem("username");
+
 function applyTailwindClasses(element, classNames) {
     element.classList.add(...classNames.split(" "));
 }
-
-const accessToken = localStorage.getItem("accessToken");
-const username = localStorage.getItem("username");
 
 function displayGlobalCredits() {
     if (!accessToken || !username) return;
@@ -17,13 +18,13 @@ function displayGlobalCredits() {
     document.body.insertAdjacentElement("afterbegin", creditsBar);
 }
 
-async function displayUserPosts(username) {
+async function displayUserPosts(username, accessToken) {
     const postContainer = document.createElement("div");
     postContainer.id = "post_container";
     postContainer.className = "grid";
 
     try {
-        const posts = await getUserPosts(username);
+        const posts = await getUserPosts(username, accessToken);
 
         if (posts && posts.length > 0) {
             posts.forEach((post) => {
@@ -88,6 +89,7 @@ async function displayProfile() {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const usernameParam = urlParams.get("username");
+
         const profile = await getProfile(accessToken, usernameParam);
 
         if (!profile) return;
@@ -152,8 +154,8 @@ async function displayProfile() {
         main.appendChild(cardProfile);
         main.appendChild(buttonContainer);
 
-        // Hent og vis brukerens poster
-        await displayUserPosts(usernameParam);
+        // 👇 Fiks: send med accessToken
+        await displayUserPosts(usernameParam, accessToken);
     } catch (error) {
         console.error("Error displaying profile:", error);
     }
