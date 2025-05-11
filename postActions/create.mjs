@@ -1,4 +1,5 @@
-// Modal to create post
+import { createPost } from "../api/postActions.mjs";
+
 export function showCreatePostModal() {
     if (document.getElementById("createPostModal")) {
         document.getElementById("createPostModal").classList.remove("hidden");
@@ -10,130 +11,111 @@ export function showCreatePostModal() {
     modalOverlay.className = "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
 
     const modalContent = document.createElement("div");
-    modalContent.className = "bg-white p-6 rounded-lg shadow-lg w-full max-w-md";  // Smaller box with max-w-md
+    modalContent.className = "bg-white p-6 rounded-lg shadow-lg w-full max-w-md";
 
     const modalTitle = document.createElement("h2");
-    modalTitle.className = "text-2xl font-bold font-['Playfair_Display'] text-center mb-6";  // Slightly smaller title
+    modalTitle.className = "text-2xl font-bold font-['Playfair_Display'] text-center mb-6";
     modalTitle.textContent = "Create a new listing";
 
     const form = document.createElement("form");
-    form.classList.add("flex", "flex-col", "items-start", "w-full", "max-w-md", "space-y-4");
+    form.classList.add("flex", "flex-col", "items-start", "w-full", "space-y-4");
 
-    // --- Title input ---
-    const titleLabel = document.createElement("label");
-    titleLabel.setAttribute("for", "create_title");
-    titleLabel.classList.add("font-medium");
-    titleLabel.textContent = "Title";
-
+    // Title
     const titleInput = document.createElement("input");
     titleInput.type = "text";
     titleInput.id = "create_title";
     titleInput.placeholder = "Title of your item";
-    titleInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-4", "py-2");
+    titleInput.className = "w-full border border-gray-300 rounded px-4 py-2";
     titleInput.required = true;
 
-    form.appendChild(titleLabel);
-    form.appendChild(titleInput);
-
-    // --- Deadline input ---
-    const deadlineLabel = document.createElement("label");
-    deadlineLabel.setAttribute("for", "create_deadline");
-    deadlineLabel.classList.add("font-medium");
-    deadlineLabel.textContent = "Deadline";
-
+    // Deadline
     const deadlineInput = document.createElement("input");
     deadlineInput.type = "datetime-local";
     deadlineInput.id = "create_deadline";
-    deadlineInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-4", "py-2");
+    deadlineInput.className = "w-full border border-gray-300 rounded px-4 py-2";
     deadlineInput.required = true;
 
-    form.appendChild(deadlineLabel);
-    form.appendChild(deadlineInput);
-
-    // --- Image URLs input ---
-    const imagesLabel = document.createElement("label");
-    imagesLabel.setAttribute("for", "create_images");
-    imagesLabel.classList.add("font-medium");
-    imagesLabel.textContent = "Image URLs (one per line)";
-
+    // Image URLs
     const imagesTextarea = document.createElement("textarea");
     imagesTextarea.id = "create_images";
     imagesTextarea.placeholder = "Enter image URLs, one per line";
-    imagesTextarea.classList.add("w-full", "h-[120px]", "border", "border-gray-300", "rounded", "px-4", "py-2", "resize-none");  // Smaller textarea
+    imagesTextarea.className = "w-full h-[120px] border border-gray-300 rounded px-4 py-2 resize-none";
     imagesTextarea.required = true;
 
-    form.appendChild(imagesLabel);
-    form.appendChild(imagesTextarea);
-
-    // --- Description input ---
-    const descriptionLabel = document.createElement("label");
-    descriptionLabel.setAttribute("for", "create_description");
-    descriptionLabel.classList.add("font-medium");
-    descriptionLabel.textContent = "Description";
-
+    // Description
     const descriptionTextarea = document.createElement("textarea");
     descriptionTextarea.id = "create_description";
     descriptionTextarea.placeholder = "Describe your item in detail";
-    descriptionTextarea.classList.add("w-full", "h-[200px]", "border", "border-gray-300", "rounded", "px-4", "py-2", "resize-none");  // Smaller textarea
+    descriptionTextarea.className = "w-full h-[200px] border border-gray-300 rounded px-4 py-2 resize-none";
     descriptionTextarea.required = true;
 
-    form.appendChild(descriptionLabel);
-    form.appendChild(descriptionTextarea);
-
-    // --- Save Button ---
+    // Save
     const saveButton = document.createElement("button");
-    saveButton.id = "save_create";
-    saveButton.type = "button";
-    saveButton.classList.add("bg-[#8B5CF6]", "text-white", "py-2", "px-4", "rounded", "w-full", "mt-4", "hover:bg-[#7c3aed]", "transition");
+    saveButton.type = "submit";
+    saveButton.className = "bg-[#8B5CF6] text-white py-2 px-4 rounded w-full mt-4 hover:bg-[#7c3aed] transition";
     saveButton.textContent = "Save";
 
-    form.appendChild(saveButton);
-
-    // --- Cancel Button ---
+    // Cancel
     const cancelButton = document.createElement("button");
     cancelButton.type = "button";
-    cancelButton.classList.add("bg-gray-300", "text-black", "py-2", "px-4", "rounded", "w-full", "mt-4", "hover:bg-gray-400", "transition");
+    cancelButton.className = "bg-gray-300 text-black py-2 px-4 rounded w-full mt-4 hover:bg-gray-400 transition";
     cancelButton.textContent = "Cancel";
 
-    form.appendChild(cancelButton);
-
-    // --- Append form to modal content ---
-    modalContent.appendChild(modalTitle);
-    modalContent.appendChild(form);
-
+    form.append(titleInput, deadlineInput, imagesTextarea, descriptionTextarea, saveButton, cancelButton);
+    modalContent.append(modalTitle, form);
     modalOverlay.appendChild(modalContent);
     document.body.appendChild(modalOverlay);
 
-    // Close modal on save
-    saveButton.addEventListener("click", async () => {
-        await handleCreatePost();
-        modalOverlay.classList.add("hidden");
-    });
-
-    // Close modal on cancel
     cancelButton.addEventListener("click", () => {
         modalOverlay.classList.add("hidden");
     });
-}
 
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-// Handle submit post
-async function handleCreatePost() {
-    try {
-        const title = document.getElementById("create_title").value.trim();
-        const deadline = document.getElementById("create_deadline").value.trim();
-        const imageURLs = document.getElementById("create_images").value.trim().split("\n");
-        const description = document.getElementById("create_description").value.trim();
+        const accessToken = localStorage.getItem("accessToken"); // <-- direkte her
 
-        if (!title || !deadline || !imageURLs.length || !description) {
-            alert("Please fill in all required fields.");
+        if (!accessToken) {
+            alert("You must be logged in to create a post.");
             return;
         }
 
-        // Her legger du til API-kall for å sende data
-        console.log("Creating post with:", { title, deadline, imageURLs, description });
+        const title = titleInput.value.trim();
+        const deadline = deadlineInput.value;
+        const imagesRaw = imagesTextarea.value.trim();
+        const description = descriptionTextarea.value.trim();
 
-    } catch (error) {
-        console.error("Error creating post:", error);
-    }
+        if (!title || !deadline || !imagesRaw || !description) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        const media = imagesRaw
+            .split("\n")
+            .map((url) => url.trim())
+            .filter((url) => url.length > 0 && url.startsWith("http"))
+            .map((url, index) => ({
+                url,
+                alt: `Image ${index + 1} for ${title}`
+            }));
+
+
+        const listingData = {
+            title,
+            description,
+            media,
+            endsAt: new Date(deadline).toISOString(),
+        };
+
+        console.log("Sending postData:", listingData);
+
+        try {
+            await createPost(accessToken, listingData);
+            modalOverlay.classList.add("hidden");
+            location.reload();
+        } catch (error) {
+            console.error("Error creating post:", error);
+            alert("Something went wrong when creating the post.");
+        }
+    });
 }
