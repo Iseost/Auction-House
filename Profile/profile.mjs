@@ -2,7 +2,7 @@ import { getProfile } from "../api/profile.mjs";
 import { showCreatePostModal } from "../postActions/create.mjs";
 import { getUserPosts } from "../api/userPosts.mjs";
 
-// Hent brukerdata fra localStorage
+// Retrieve user data from localStorage
 const accessToken = localStorage.getItem("accessToken");
 const username = localStorage.getItem("username");
 
@@ -29,7 +29,13 @@ async function displayUserPosts(username, accessToken) {
         if (posts && posts.length > 0) {
             posts.forEach((post) => {
                 const card = document.createElement("div");
-                card.classList.add("card", "p-4", "m-4", "bg-white", "rounded", "shadow");
+                card.classList.add(
+                    "card", "p-4", "m-4", "bg-white", "rounded", "shadow",
+                    "flex", "flex-col", "justify-between", "h-full"
+                );
+
+                const contentWrapper = document.createElement("div");
+                contentWrapper.className = "flex flex-col flex-grow";
 
                 const img = document.createElement("img");
                 img.classList.add("card_img", "w-full", "rounded");
@@ -60,14 +66,32 @@ async function displayUserPosts(username, accessToken) {
                 bids.textContent = `Bids: ${post._count?.bids || 0}`;
                 applyTailwindClasses(bids, "text-sm font-semibold text-blue-800 mt-2");
 
-                card.appendChild(img);
-                card.appendChild(title);
-                card.appendChild(description);
-                card.appendChild(createdAt);
-                card.appendChild(updatedAt);
-                card.appendChild(endsAt);
-                card.appendChild(bids);
+                // Append content
+                contentWrapper.appendChild(img);
+                contentWrapper.appendChild(title);
+                contentWrapper.appendChild(description);
+                contentWrapper.appendChild(createdAt);
+                contentWrapper.appendChild(updatedAt);
+                contentWrapper.appendChild(endsAt);
+                contentWrapper.appendChild(bids);
 
+                // 👇 Only show if logged-in user is the seller
+                if (post.seller.name === username) {
+                    const buttonWrapper = document.createElement("div");
+                    buttonWrapper.className = "flex justify-end mt-auto pt-4";
+
+                    const editBtn = document.createElement("button");
+                    editBtn.textContent = "Update";
+                    editBtn.className = "bg-Blue_Chill text-white px-3 py-1 text-sm rounded hover:bg-blue-700";
+                    editBtn.addEventListener("click", () => {
+                        window.location.href = `/postActions/updateListing.html?id=${post.id}`;
+                    });
+
+                    buttonWrapper.appendChild(editBtn);
+                    contentWrapper.appendChild(buttonWrapper);
+                }
+
+                card.appendChild(contentWrapper);
                 postContainer.appendChild(card);
             });
         } else {
@@ -91,7 +115,6 @@ async function displayProfile() {
         const usernameParam = urlParams.get("username");
 
         const profile = await getProfile(accessToken, usernameParam);
-
         if (!profile) return;
 
         const main = document.querySelector("main");
@@ -138,7 +161,7 @@ async function displayProfile() {
             applyTailwindClasses(editButton, "edit_button bg-Blue_Chill text-white text-sm px-3 py-1 rounded");
             editButton.innerText = "Edit Profile";
             editButton.addEventListener("click", () => {
-                window.location.href = "../profile/edit.html";
+                window.location.href = "../postActions/edit.html";
             });
 
             const createButton = document.createElement("button");
@@ -154,7 +177,7 @@ async function displayProfile() {
         main.appendChild(cardProfile);
         main.appendChild(buttonContainer);
 
-        // 👇 Fiks: send med accessToken
+        // Show user posts
         await displayUserPosts(usernameParam, accessToken);
     } catch (error) {
         console.error("Error displaying profile:", error);

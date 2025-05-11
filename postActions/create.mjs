@@ -73,7 +73,7 @@ export function showCreatePostModal() {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const accessToken = localStorage.getItem("accessToken"); // <-- direkte her
+        const accessToken = localStorage.getItem("accessToken");
 
         if (!accessToken) {
             alert("You must be logged in to create a post.");
@@ -99,15 +99,12 @@ export function showCreatePostModal() {
                 alt: `Image ${index + 1} for ${title}`
             }));
 
-
         const listingData = {
             title,
             description,
             media,
             endsAt: new Date(deadline).toISOString(),
         };
-
-        console.log("Sending postData:", listingData);
 
         try {
             await createPost(accessToken, listingData);
