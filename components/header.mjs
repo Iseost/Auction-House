@@ -5,21 +5,30 @@ function createHeader() {
     const header = document.querySelector('header');
 
     const nav = document.createElement('nav');
-    nav.classList = 'nav-container flex flex-wrap md:flex-nowrap gap-4 justify-between items-center p-4 bg-white shadow';
+    nav.className = 'nav-container relative flex justify-between items-center p-4 bg-white shadow';
+
+
+    const burgerButton = document.createElement('button');
+    burgerButton.innerHTML = '&#9776;'; // ☰
+    burgerButton.setAttribute('aria-label', 'Toggle menu');
+    burgerButton.className = 'text-3xl text-Blue_Chill z-50';
+    nav.appendChild(burgerButton);
 
 
     const menuWrapper = document.createElement('div');
-    menuWrapper.className = 'menu-wrapper w-full md:w-auto md:flex hidden flex-col md:flex-row gap-2 sm:gap-4 mt-2 md:mt-0 items-start md:items-center';
+    menuWrapper.className = `
+        fixed top-0 right-0 h-full bg-white shadow-lg 
+        transform translate-x-full transition-transform duration-300 ease-in-out 
+        w-2/3 sm:w-1/2 max-w-xs z-40 p-6
+    `;
 
     const menu = document.createElement('div');
-    menu.classList = 'menu flex flex-col md:flex-row gap-2 sm:gap-4';
+    menu.className = 'flex flex-col gap-4';
 
     const feedButton = document.createElement('button');
     feedButton.textContent = 'Feed';
     feedButton.className = 'text-white bg-Blue_Chill px-4 py-2 rounded hover:bg-Blue_Chill/80 transition';
-    feedButton.addEventListener('click', () => {
-        window.location.href = '../index.html';
-    });
+    feedButton.addEventListener('click', () => window.location.href = '../index.html');
     menu.appendChild(feedButton);
 
     if (loggedIn) {
@@ -36,54 +45,48 @@ function createHeader() {
         });
 
         const logoutButton = document.createElement('button');
-        logoutButton.classList = 'logout_button text-white bg-Blue_Chill px-4 py-2 rounded hover:bg-Blue_Chill/80 transition';
         logoutButton.textContent = 'Logout';
-        logoutButton.addEventListener('click', function () {
-            logout();
-        });
+        logoutButton.className = 'text-white bg-Blue_Chill px-4 py-2 rounded hover:bg-Blue_Chill/80 transition';
+        logoutButton.addEventListener('click', logout);
 
         menu.appendChild(profileButton);
         menu.appendChild(logoutButton);
     } else {
         const loginButton = document.createElement('button');
-        loginButton.classList = 'login_button text-white bg-Blue_Chill px-4 py-2 rounded hover:bg-Blue_Chill/80 transition';
         loginButton.textContent = 'Sign in';
-        loginButton.addEventListener('click', function () {
-            window.location.href = '../auth/login.html';
-        });
+        loginButton.className = 'text-white bg-Blue_Chill px-4 py-2 rounded hover:bg-Blue_Chill/80 transition';
+        loginButton.addEventListener('click', () => window.location.href = '../auth/login.html');
 
         const registerButton = document.createElement('button');
-        registerButton.classList = 'register_button text-white bg-Blue_Chill px-4 py-2 rounded hover:bg-Blue_Chill/80 transition';
         registerButton.textContent = 'Sign up';
-        registerButton.addEventListener('click', function () {
-            window.location.href = '../auth/register.html';
-        });
+        registerButton.className = 'text-white bg-Blue_Chill px-4 py-2 rounded hover:bg-Blue_Chill/80 transition';
+        registerButton.addEventListener('click', () => window.location.href = '../auth/register.html');
 
         menu.appendChild(loginButton);
         menu.appendChild(registerButton);
     }
 
     menuWrapper.appendChild(menu);
-
+    nav.appendChild(menuWrapper);
 
     const searchForm = document.createElement('form');
-    searchForm.classList = 'search-form w-full md:w-auto flex flex-wrap sm:flex-nowrap items-center gap-2';
+    searchForm.className = 'absolute right-4 flex items-center gap-2';
 
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
     searchInput.placeholder = 'Search...';
-    searchInput.classList = 'sm:w-40 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-Blue_Chill';
+    searchInput.className = 'border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-Blue_Chill';
 
     const searchButton = document.createElement('button');
     searchButton.type = 'submit';
     searchButton.textContent = 'Search';
-    searchButton.classList = 'ml-2 bg-Blue_Chill text-white px-4 py-2 rounded hover:bg-Heliotrope';
+    searchButton.className = 'bg-Blue_Chill text-white px-4 py-2 rounded hover:bg-Heliotrope';
 
     searchForm.appendChild(searchInput);
     searchForm.appendChild(searchButton);
+    nav.appendChild(searchForm);
 
-
-    searchForm.addEventListener('submit', function (e) {
+    searchForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const query = searchInput.value.trim();
         if (query) {
@@ -94,20 +97,11 @@ function createHeader() {
         }
     });
 
-    const burgerButton = document.createElement('button');
-    burgerButton.innerHTML = '&#9776;'; // ☰ ikon
-    burgerButton.setAttribute('aria-label', 'Toggle menu');
-    burgerButton.className = 'block md:hidden text-3xl text-Blue_Chill';
-
 
     burgerButton.addEventListener('click', () => {
-        menuWrapper.classList.toggle('hidden');
+        menuWrapper.classList.toggle('translate-x-full');
     });
 
-
-    nav.appendChild(burgerButton);
-    nav.appendChild(menuWrapper);
-    nav.appendChild(searchForm);
     header.appendChild(nav);
 }
 
