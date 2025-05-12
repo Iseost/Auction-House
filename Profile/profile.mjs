@@ -10,7 +10,7 @@ function applyTailwindClasses(element, classNames) {
     element.classList.add(...classNames.split(" "));
 }
 
-function displayGlobalCredits() {
+export function displayGlobalCredits() {
     if (!accessToken || !username) return;
 
     const creditsBar = document.createElement("div");
