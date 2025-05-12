@@ -10,51 +10,50 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        // Hent token og brukernavn fra localStorage
-        const accessToken = localStorage.getItem("authToken");  // Bytt ut med riktig metode hvis tokenet er lagret et annet sted
-        const username = localStorage.getItem("username");  // Bytt ut med riktig metode for å hente brukernavnet
 
-        console.log("Access Token:", accessToken);  // Legg til logging
-        console.log("Username:", username);  // Legg til logging
+        const accessToken = localStorage.getItem("accessToken");
+        const username = localStorage.getItem("username");
+
+        console.log("Access Token:", accessToken);
+        console.log("Username:", username);
 
         if (!accessToken || !username) {
             alert("You are not logged in. Please log in first.");
-            window.location.href = "/login"; // Omdiriger til innloggingsside
+            window.location.href = "/login";
             return;
         }
 
-        // Hent brukerens profil
         const profile = await getProfile(accessToken, username);
-        console.log("Profile:", profile);  // Logg profilen for å se om det fungerer
+        console.log("Profile:", profile);
 
         if (!profile) {
             alert("Failed to fetch profile.");
             return;
         }
 
-        // Hent brukerens innlegg
+
         const userPosts = await getUserPosts(username, accessToken);
-        console.log("User posts:", userPosts);  // Logg innleggene for å sjekke responsen
+        console.log("User posts:", userPosts);
 
         if (!userPosts || userPosts.length === 0) {
             alert("No posts found for the user.");
             return;
         }
 
-        // Finn innlegget med gitt postId
-        const post = userPosts.find(p => p._id === postId);
+
+        const post = userPosts.find(p => p.id.toString() === postId);
+
         if (!post) {
             alert("Post not found.");
             return;
         }
 
-        // Fyll inn feltene med post-data
         document.getElementById("edit_title").value = post.title;
         document.getElementById("edit_deadline").value = new Date(post.endsAt).toISOString().slice(0, 16);
         document.getElementById("edit_images").value = post.media.map((img) => img.url).join("\n");
         document.getElementById("edit_description").value = post.description;
 
-        // Håndter lagring av endringer
+
         document.getElementById("editPostForm").addEventListener("submit", async (e) => {
             e.preventDefault();
 
@@ -76,21 +75,21 @@ document.addEventListener("DOMContentLoaded", async () => {
             try {
                 await updatePost(accessToken, postId, updatedPost);
                 alert("Post updated successfully.");
-                window.location.href = `../profile/profile.html/${postId}`;
+                window.location.href = "/";
             } catch (error) {
                 console.error("Error updating post:", error);
                 alert("Something went wrong when updating the post.");
             }
         });
 
-        // Håndter sletting av innlegg
+
         document.getElementById("delete_post").addEventListener("click", async () => {
             const confirmation = confirm("Are you sure you want to delete this post?");
             if (confirmation) {
                 try {
                     await deletePost(accessToken, postId);
                     alert("Post deleted successfully.");
-                    window.location.href = "/";  // Redirect to homepage or relevant page
+                    window.location.href = "/";
                 } catch (error) {
                     console.error("Error deleting post:", error);
                     alert("Something went wrong when deleting the post.");
