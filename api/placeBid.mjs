@@ -2,7 +2,8 @@
 import { API_AUCTION_LISTINGS } from '../constants.mjs';
 
 export async function placeBidListing(body) {
-    const id = new URLSearchParams(window.location.search).get('id');
+    const id = new URLSearchParams(window.location.search).get('postId');
+
     try {
         const url = `${API_AUCTION_LISTINGS}/${id}/bids?_seller=true&_bids=true`;
 
@@ -10,7 +11,8 @@ export async function placeBidListing(body) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+
             },
             body: JSON.stringify({ amount: body }),
         });

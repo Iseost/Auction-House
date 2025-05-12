@@ -110,6 +110,7 @@ async function displaySinglePost() {
         form.addEventListener("submit", onPlaceBid);
 
         const input = document.createElement("input");
+        input.name = "bid";
         input.type = "number";
         input.min = 1;
         input.placeholder = "Bid Me 🪙";
