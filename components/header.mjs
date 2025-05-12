@@ -21,13 +21,11 @@ function createHeader() {
         w-2/3 sm:w-1/2 max-w-xs z-40 p-6 flex flex-col gap-4
     `;
 
-    // Legg kredittinfo øverst i menyen
     const creditDisplay = document.createElement('p');
     creditDisplay.id = 'creditsDisplay';
     creditDisplay.className = 'text-lg text-Blue_Chill font-semibold'; // Du kan justere stilene etter behov
     menuWrapper.appendChild(creditDisplay);
 
-    // Funksjon for å oppdatere kredittinfo
     async function updateCreditDisplay() {
         const accessToken = localStorage.getItem('accessToken');
         const username = localStorage.getItem('username');
@@ -43,7 +41,6 @@ function createHeader() {
         }
     }
 
-    // Oppdater kreditt når menyen åpnes
     updateCreditDisplay();
 
     const menu = document.createElement('div');
