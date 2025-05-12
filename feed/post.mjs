@@ -133,7 +133,7 @@ async function displaySinglePost() {
         bidding.appendChild(form);
         bidding.appendChild(viewBtn);
 
-        // Append all to content container
+
         contentContainer.appendChild(profile);
         contentContainer.appendChild(title);
         contentContainer.appendChild(body);

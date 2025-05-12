@@ -7,7 +7,7 @@ function createHeader() {
     const nav = document.createElement('nav');
     nav.classList = 'nav-container flex flex-wrap md:flex-nowrap gap-4 justify-between items-center p-4 bg-white shadow';
 
-    // LEFT: Menu
+
     const menuWrapper = document.createElement('div');
     menuWrapper.className = 'menu-wrapper w-full md:w-auto md:flex hidden flex-col md:flex-row gap-2 sm:gap-4 mt-2 md:mt-0 items-start md:items-center';
 
@@ -65,7 +65,7 @@ function createHeader() {
 
     menuWrapper.appendChild(menu);
 
-    // RIGHT: Search bar
+
     const searchForm = document.createElement('form');
     searchForm.classList = 'search-form w-full md:w-auto flex flex-wrap sm:flex-nowrap items-center gap-2';
 
@@ -82,7 +82,7 @@ function createHeader() {
     searchForm.appendChild(searchInput);
     searchForm.appendChild(searchButton);
 
-    // Optional: handle search logic
+
     searchForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const query = searchInput.value.trim();
@@ -94,19 +94,17 @@ function createHeader() {
         }
     });
 
-
-    // LEFT: Hamburger Button
     const burgerButton = document.createElement('button');
     burgerButton.innerHTML = '&#9776;'; // ☰ ikon
     burgerButton.setAttribute('aria-label', 'Toggle menu');
     burgerButton.className = 'block md:hidden text-3xl text-Blue_Chill';
 
-    // Toggle menu visibility
+
     burgerButton.addEventListener('click', () => {
         menuWrapper.classList.toggle('hidden');
     });
 
-    // Append all elements to nav
+
     nav.appendChild(burgerButton);
     nav.appendChild(menuWrapper);
     nav.appendChild(searchForm);

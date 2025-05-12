@@ -34,7 +34,7 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
 
     header.append(profile, createdDate);
 
-    // 🔹 Resten av kortet
+
     const imageContainer = document.createElement("div");
     applyTailwindClasses(imageContainer, "flex items-center justify-center w-full max-h-[200px] sm:max-h-[240px] h-full cursor-pointer overflow-hidden drop-shadow-darkFaded");
 

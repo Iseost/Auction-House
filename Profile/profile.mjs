@@ -2,7 +2,7 @@ import { getProfile } from "../api/profile.mjs";
 import { showCreatePostModal } from "../postActions/create.mjs";
 import { getUserPosts } from "../api/userPosts.mjs";
 
-// Retrieve user data from localStorage
+
 const accessToken = localStorage.getItem("accessToken");
 const username = localStorage.getItem("username");
 
