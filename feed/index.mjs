@@ -53,14 +53,14 @@ async function initFeed(query = "") {
 }
 
 clearSearchBtn.addEventListener("click", () => {
-    window.history.replaceState(null, "", window.location.pathname); // Fjern query-param
-    initFeed(); // Last alle innlegg igjen
+    window.history.replaceState(null, "", window.location.pathname);
+    initFeed();
 });
 
 document.addEventListener("search", (e) => {
     const query = e.detail.query.toLowerCase();
-    window.history.replaceState(null, "", `?q=${query}`); // Oppdater URL med søkespørsmål
-    initFeed(query); // Kjør feed med det nye søket
+    window.history.replaceState(null, "", `?q=${query}`);
+    initFeed(query);
 });
 
 

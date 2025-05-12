@@ -65,7 +65,7 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     applyTailwindClasses(timer, "text-sm text-red-600 mt-2");
 
     const button = document.createElement("button");
-    button.innerText = "Read more";
+    button.innerText = "Make a Bid";
     applyTailwindClasses(button, "mt-3 bg-Heliotrope text-white px-4 py-2 rounded hover:opacity-90 transition-opacity duration-200");
     button.addEventListener("click", () => {
         window.location.href = `./feed/post.html?postId=${id}`;

@@ -20,8 +20,6 @@ async function displaySinglePost() {
         const response = await getSinglePost(accessToken, postId);
         const post = response?.data;
 
-        console.log("Post data:", post);
-
         const content = document.getElementById("singlePost_container");
 
         if (!post) {
@@ -93,16 +91,17 @@ async function displaySinglePost() {
         applyTailwindClasses(bidding, "space-y-4");
 
         const currentBid = document.createElement("p");
+        currentBid.id = "currentBid";
         currentBid.textContent = `Current Bid: ${post.currentBid || "No bids yet"}`;
         applyTailwindClasses(currentBid, "text-base font-medium text-gray-800");
 
         const bidCount = document.createElement("p");
+        bidCount.id = "bidCount";
         bidCount.textContent = `${post.bids?.length ?? 0} bids placed`;
         applyTailwindClasses(bidCount, "text-sm text-gray-500");
 
         const buttonsContainer = document.createElement("div");
         applyTailwindClasses(buttonsContainer, "flex items-center gap-3");
-
 
         const form = document.createElement("form");
         applyTailwindClasses(form, "flex flex-col sm:flex-row items-start sm:items-center gap-3");
@@ -120,7 +119,6 @@ async function displaySinglePost() {
         bidBtn.textContent = "Bid Me";
         applyTailwindClasses(bidBtn, "bg-allports hover:bg-blue-700 text-white px-4 py-2 rounded");
 
-
         const viewBidsBtn = document.createElement("button");
         viewBidsBtn.type = "button";
         viewBidsBtn.textContent = "View Bids";
@@ -133,7 +131,7 @@ async function displaySinglePost() {
         form.appendChild(buttonsContainer);
 
         const modalContainer = document.createElement("div");
-        modalContainer.style.display = "none"; // hidden by default
+        modalContainer.style.display = "none";
         applyTailwindClasses(modalContainer, "fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center");
 
         const modalContent = document.createElement("div");
@@ -144,6 +142,7 @@ async function displaySinglePost() {
         applyTailwindClasses(modalHeader, "text-xl font-semibold mb-4");
 
         const modalList = document.createElement("ul");
+        modalList.id = "modalList"; // Legg til ID her
         applyTailwindClasses(modalList, "space-y-2");
 
         const closeModalBtn = document.createElement("button");
@@ -152,19 +151,19 @@ async function displaySinglePost() {
 
         closeModalBtn.addEventListener("click", () => {
             modalContainer.style.display = "none";
+            viewBidsBtn.textContent = "View Bids";
         });
 
         modalContent.appendChild(modalHeader);
         modalContent.appendChild(modalList);
         modalContent.appendChild(closeModalBtn);
         modalContainer.appendChild(modalContent);
-
         document.body.appendChild(modalContainer);
 
         viewBidsBtn.addEventListener("click", () => {
             if (modalContainer.style.display === "none") {
                 modalList.innerHTML = "";
-                const bidders = post.bids?.map(bid => {
+                post.bids?.forEach(bid => {
                     const listItem = document.createElement("li");
                     listItem.className = "flex items-center justify-between bg-gray-100 p-3 rounded-lg";
 
@@ -189,22 +188,15 @@ async function displaySinglePost() {
 
                     listItem.appendChild(profile);
                     listItem.appendChild(amount);
-
-                    return listItem;
+                    modalList.appendChild(listItem);
                 });
 
-                bidders?.forEach(bidder => modalList.appendChild(bidder));
                 modalContainer.style.display = "flex";
                 viewBidsBtn.textContent = "Hide Bids";
             } else {
                 modalContainer.style.display = "none";
                 viewBidsBtn.textContent = "View Bids";
             }
-        });
-
-        closeModalBtn.addEventListener("click", () => {
-            modalContainer.style.display = "none";
-            viewBidsBtn.textContent = "View Bids";
         });
 
         bidding.appendChild(currentBid);
