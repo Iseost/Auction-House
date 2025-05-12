@@ -5,6 +5,12 @@ function applyTailwindClasses(element, classes) {
     element.className = classes;
 }
 
+function getHighestBid(bids = []) {
+    if (!Array.isArray(bids) || bids.length === 0) return null;
+    return bids.reduce((max, bid) => bid.amount > max ? bid.amount : max, 0);
+}
+
+
 async function displaySinglePost() {
     try {
         const queryString = window.location.search;
@@ -69,7 +75,7 @@ async function displaySinglePost() {
 
         const body = document.createElement("p");
         body.textContent = post.description || post.body || "No description.";
-        applyTailwindClasses(body, "text-gray-700 leading-relaxed");
+        applyTailwindClasses(body, "text-gray-700 leading-relaxed border-b border-darkFaded");
 
         const auction = document.createElement("div");
         applyTailwindClasses(auction, "space-y-2");
@@ -85,15 +91,19 @@ async function displaySinglePost() {
         const mins = Math.floor((timeLeft / (1000 * 60)) % 60);
         const secs = Math.floor((timeLeft / 1000) % 60);
         endsIn.textContent = `${days}d ${hours}h ${mins}m ${secs}s`;
-        applyTailwindClasses(endsIn, "text-sm text-gray-600");
+        applyTailwindClasses(endsIn, "text-sm text-gray-600 border-b border-darkFaded");
 
         const bidding = document.createElement("div");
         applyTailwindClasses(bidding, "space-y-4");
 
         const currentBid = document.createElement("p");
         currentBid.id = "currentBid";
-        currentBid.textContent = `Current Bid: ${post.currentBid || "No bids yet"}`;
+
+        const highestBid = getHighestBid(post.bids);
+        currentBid.textContent = `Current Bid: ${highestBid !== null ? highestBid + " credits" : "No bids yet"}`;
+
         applyTailwindClasses(currentBid, "text-base font-medium text-gray-800");
+
 
         const bidCount = document.createElement("p");
         bidCount.id = "bidCount";
