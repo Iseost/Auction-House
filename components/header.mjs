@@ -1,4 +1,5 @@
 import { logout } from '../components/logout.mjs';
+import { getProfile } from '../api/profile.mjs';
 
 function createHeader() {
     const loggedIn = localStorage.getItem('username') ? true : false;
@@ -7,20 +8,43 @@ function createHeader() {
     const nav = document.createElement('nav');
     nav.className = 'nav-container relative flex justify-between items-center p-4 bg-white shadow';
 
-
     const burgerButton = document.createElement('button');
     burgerButton.innerHTML = '&#9776;'; // ☰
     burgerButton.setAttribute('aria-label', 'Toggle menu');
     burgerButton.className = 'text-3xl text-Blue_Chill z-50';
     nav.appendChild(burgerButton);
 
-
     const menuWrapper = document.createElement('div');
     menuWrapper.className = `
         fixed top-0 right-0 h-full bg-white shadow-lg 
         transform translate-x-full transition-transform duration-300 ease-in-out 
-        w-2/3 sm:w-1/2 max-w-xs z-40 p-6
+        w-2/3 sm:w-1/2 max-w-xs z-40 p-6 flex flex-col gap-4
     `;
+
+    // Legg kredittinfo øverst i menyen
+    const creditDisplay = document.createElement('p');
+    creditDisplay.id = 'creditsDisplay';
+    creditDisplay.className = 'text-lg text-Blue_Chill font-semibold'; // Du kan justere stilene etter behov
+    menuWrapper.appendChild(creditDisplay);
+
+    // Funksjon for å oppdatere kredittinfo
+    async function updateCreditDisplay() {
+        const accessToken = localStorage.getItem('accessToken');
+        const username = localStorage.getItem('username');
+        if (!accessToken || !username) return;
+
+        try {
+            const profile = await getProfile(accessToken, username);
+            if (profile) {
+                creditDisplay.textContent = `💰 Credits: ${profile.data.credits}`;
+            }
+        } catch (error) {
+            console.error('Feil ved henting av kreditt:', error);
+        }
+    }
+
+    // Oppdater kreditt når menyen åpnes
+    updateCreditDisplay();
 
     const menu = document.createElement('div');
     menu.className = 'flex flex-col gap-4';
@@ -96,7 +120,6 @@ function createHeader() {
             document.dispatchEvent(searchEvent);
         }
     });
-
 
     burgerButton.addEventListener('click', () => {
         menuWrapper.classList.toggle('translate-x-full');
