@@ -10,7 +10,6 @@ function getHighestBid(bids = []) {
     return bids.reduce((max, bid) => bid.amount > max ? bid.amount : max, 0);
 }
 
-
 async function displaySinglePost() {
     try {
         const queryString = window.location.search;
@@ -51,8 +50,8 @@ async function displaySinglePost() {
         applyTailwindClasses(user, "flex items-center gap-4");
 
         const avatar = document.createElement("img");
-        avatar.src = post.seller?.avatar || "../src/assets/image.png";
-        avatar.alt = post.seller?.name || "User avatar";
+        avatar.src = post.seller?.avatar?.url || "../src/assets/image.png";
+        avatar.alt = post.seller?.avatar?.alt || `${post.seller?.name || "User"}'s avatar`;
         applyTailwindClasses(avatar, "w-10 h-10 rounded-full");
 
         const username = document.createElement("span");
@@ -101,9 +100,7 @@ async function displaySinglePost() {
 
         const highestBid = getHighestBid(post.bids);
         currentBid.textContent = `Current Bid: ${highestBid !== null ? highestBid + " credits" : "No bids yet"}`;
-
         applyTailwindClasses(currentBid, "text-base font-medium text-gray-800");
-
 
         const bidCount = document.createElement("p");
         bidCount.id = "bidCount";
@@ -115,7 +112,6 @@ async function displaySinglePost() {
 
         const form = document.createElement("form");
         applyTailwindClasses(form, "flex flex-col sm:flex-row items-start sm:items-center gap-3");
-        form.addEventListener("submit", onPlaceBid);
 
         const input = document.createElement("input");
         input.name = "bid";
@@ -137,9 +133,48 @@ async function displaySinglePost() {
         buttonsContainer.appendChild(input);
         buttonsContainer.appendChild(bidBtn);
         buttonsContainer.appendChild(viewBidsBtn);
-
         form.appendChild(buttonsContainer);
 
+        // Legg til login-prompt modal
+        const loginPromptModal = document.createElement("div");
+        loginPromptModal.id = "loginPromptModal";
+        loginPromptModal.style.display = "none";
+        applyTailwindClasses(loginPromptModal, "fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center");
+
+        const loginPromptContent = document.createElement("div");
+        applyTailwindClasses(loginPromptContent, "bg-white p-6 rounded shadow-lg text-center");
+
+        const loginPromptText = document.createElement("p");
+        loginPromptText.textContent = "You must be logged in to place a bid.";
+        applyTailwindClasses(loginPromptText, "mb-4 text-gray-800");
+
+        const closeLoginPrompt = document.createElement("button");
+        closeLoginPrompt.textContent = "Okay";
+        applyTailwindClasses(closeLoginPrompt, "bg-allports hover:bg-blue-700 text-white px-4 py-2 rounded");
+
+        // Når man klikker "Okay" → send til login
+        closeLoginPrompt.addEventListener("click", () => {
+            window.location.href = "../auth/login.html";
+        });
+
+        loginPromptContent.appendChild(loginPromptText);
+        loginPromptContent.appendChild(closeLoginPrompt);
+        loginPromptModal.appendChild(loginPromptContent);
+        document.body.appendChild(loginPromptModal);
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const accessToken = localStorage.getItem("accessToken");
+
+            if (!accessToken) {
+                loginPromptModal.style.display = "flex";
+                return;
+            }
+
+            onPlaceBid(e);
+        });
+
+        // Modal for View Bids
         const modalContainer = document.createElement("div");
         modalContainer.style.display = "none";
         applyTailwindClasses(modalContainer, "fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center");
@@ -152,7 +187,7 @@ async function displaySinglePost() {
         applyTailwindClasses(modalHeader, "text-xl font-semibold mb-4");
 
         const modalList = document.createElement("ul");
-        modalList.id = "modalList"; // Legg til ID her
+        modalList.id = "modalList";
         applyTailwindClasses(modalList, "space-y-2");
 
         const closeModalBtn = document.createElement("button");

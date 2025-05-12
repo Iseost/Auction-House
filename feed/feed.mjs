@@ -72,15 +72,18 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     const timer = auctionTimeLeft(endsAt);
     applyTailwindClasses(timer, "text-sm text-red-600 mt-2");
 
-    const button = document.createElement("button");
-    button.innerText = "Make a Bid";
-    applyTailwindClasses(button, "mt-3 bg-Heliotrope text-white px-4 py-2 rounded hover:opacity-90 transition-opacity duration-200");
-    button.addEventListener("click", () => {
-        window.location.href = `./feed/post.html?postId=${id}`;
-    });
+    card.append(header, imageContainer, title, smallText, endDate, timer);
 
-    card.append(header, imageContainer, title, smallText, endDate, timer, button);
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+        const button = document.createElement("button");
+        button.innerText = "Make a Bid";
+        applyTailwindClasses(button, "mt-3 bg-Heliotrope text-white px-4 py-2 rounded hover:opacity-90 transition-opacity duration-200");
+        button.addEventListener("click", () => {
+            window.location.href = `./feed/post.html?postId=${id}`;
+        });
+        card.appendChild(button);
+    }
+
     content.appendChild(card);
 }
-
-
