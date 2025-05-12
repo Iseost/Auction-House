@@ -1,6 +1,5 @@
 import { getSinglePost } from "../api/singlePost.mjs";
 import { onPlaceBid } from "../postActions/placeBid.mjs";
-// Removed unused import for renderBidList
 
 function applyTailwindClasses(element, classes) {
     element.className = classes;
@@ -33,17 +32,14 @@ async function displaySinglePost() {
         const container = document.createElement("div");
         applyTailwindClasses(container, "w-full max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md");
 
-        // Media
         const img = document.createElement("img");
         img.src = post.media?.[0]?.url || "../src/assets/image.png";
         img.alt = post.media?.[0]?.alt || "Post image";
         applyTailwindClasses(img, "w-full h-auto object-cover rounded");
 
-        // Content container
         const contentContainer = document.createElement("div");
         applyTailwindClasses(contentContainer, "py-6 space-y-6");
 
-        // Profile section
         const profile = document.createElement("div");
         applyTailwindClasses(profile, "flex items-center justify-between");
 
@@ -69,17 +65,14 @@ async function displaySinglePost() {
         profile.appendChild(user);
         profile.appendChild(date);
 
-        // Title
         const title = document.createElement("h1");
         title.textContent = post.title;
         applyTailwindClasses(title, "text-2xl font-bold text-gray-900");
 
-        // Description
         const body = document.createElement("p");
         body.textContent = post.description || post.body || "No description.";
         applyTailwindClasses(body, "text-gray-700 leading-relaxed");
 
-        // Auction info
         const auction = document.createElement("div");
         applyTailwindClasses(auction, "space-y-2");
 
@@ -96,7 +89,6 @@ async function displaySinglePost() {
         endsIn.textContent = `${days}d ${hours}h ${mins}m ${secs}s`;
         applyTailwindClasses(endsIn, "text-sm text-gray-600");
 
-        // Bidding area
         const bidding = document.createElement("div");
         applyTailwindClasses(bidding, "space-y-4");
 
@@ -108,11 +100,10 @@ async function displaySinglePost() {
         bidCount.textContent = `${post.bids?.length ?? 0} bids placed`;
         applyTailwindClasses(bidCount, "text-sm text-gray-500");
 
-        // Form container (now contains both buttons)
         const buttonsContainer = document.createElement("div");
         applyTailwindClasses(buttonsContainer, "flex items-center gap-3");
 
-        // Form
+
         const form = document.createElement("form");
         applyTailwindClasses(form, "flex flex-col sm:flex-row items-start sm:items-center gap-3");
         form.addEventListener("submit", onPlaceBid);
@@ -127,23 +118,20 @@ async function displaySinglePost() {
         const bidBtn = document.createElement("button");
         bidBtn.type = "submit";
         bidBtn.textContent = "Bid Me";
-        applyTailwindClasses(bidBtn, "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded");
+        applyTailwindClasses(bidBtn, "bg-allports hover:bg-blue-700 text-white px-4 py-2 rounded");
 
-        // View Bids button
+
         const viewBidsBtn = document.createElement("button");
         viewBidsBtn.type = "button";
         viewBidsBtn.textContent = "View Bids";
-        applyTailwindClasses(viewBidsBtn, "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded");
+        applyTailwindClasses(viewBidsBtn, "bg-allports hover:bg-green-700 text-white px-4 py-2 rounded");
 
-        // Add buttons to the container
         buttonsContainer.appendChild(input);
         buttonsContainer.appendChild(bidBtn);
         buttonsContainer.appendChild(viewBidsBtn);
 
-        // Add buttons container to the form
         form.appendChild(buttonsContainer);
 
-        // Modal container for bid list
         const modalContainer = document.createElement("div");
         modalContainer.style.display = "none"; // hidden by default
         applyTailwindClasses(modalContainer, "fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center");
@@ -173,7 +161,6 @@ async function displaySinglePost() {
 
         document.body.appendChild(modalContainer);
 
-        // View bids button functionality
         viewBidsBtn.addEventListener("click", () => {
             if (modalContainer.style.display === "none") {
                 modalList.innerHTML = "";
@@ -220,7 +207,6 @@ async function displaySinglePost() {
             viewBidsBtn.textContent = "View Bids";
         });
 
-        // Layout structure
         bidding.appendChild(currentBid);
         bidding.appendChild(bidCount);
         bidding.appendChild(form);
