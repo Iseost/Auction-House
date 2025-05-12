@@ -17,7 +17,9 @@ async function displaySinglePost() {
         }
 
         const accessToken = localStorage.getItem("accessToken");
-        const post = await getSinglePost(accessToken, postId);
+        const response = await getSinglePost(accessToken, postId);
+        const post = response?.data;
+
         console.log("Post data:", post);
 
         const content = document.getElementById("singlePost_container");
