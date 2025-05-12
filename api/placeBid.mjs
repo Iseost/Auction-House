@@ -10,7 +10,7 @@ export async function placeBidListing(body) {
 
     const token = localStorage.getItem('accessToken');
     if (!token) {
-        alert("Du må være logget inn for å legge inn bud.");
+        alert("You must be logged in to place a bid..");
         return;
     }
 
@@ -30,7 +30,7 @@ export async function placeBidListing(body) {
         if (!response.ok) {
             const errorData = await response.json();
             console.warn("API error response:", errorData);
-            alert(`Kunne ikke legge inn bud: ${errorData.errors?.[0]?.message || response.statusText}`);
+            alert(`Could not place bid: ${errorData.errors?.[0]?.message || response.statusText}`);
         } else {
             const data = await response.json();
             setTimeout(() => window.location.reload(), 500);
