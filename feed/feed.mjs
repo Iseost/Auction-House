@@ -19,6 +19,10 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     const avatarImg = document.createElement("img");
     avatarImg.src = (typeof avatar === 'string' && avatar.trim() !== "") ? avatar : "./src/assets/image.png";
     avatarImg.alt = `${sellerName || "User"}'s avatar`;
+    avatarImg.addEventListener("click", () => {
+        window.location.href = `../profile/profile.html?username=${sellerName || "Unknown"}`;
+    });
+    avatarImg.style.cursor = "pointer";
     avatarImg.onerror = () => {
         avatarImg.src = "./src/assets/image.png";
     };
@@ -26,6 +30,10 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
 
     const name = document.createElement("span");
     name.innerText = sellerName || "Unknown";
+    name.addEventListener("click", () => {
+        window.location.href = `../profile/profile.html?username=${sellerName || "Unknown"}`;
+    });
+    name.style.cursor = "pointer";
     applyTailwindClasses(name, "text-sm font-medium text-gray-800");
 
     profile.append(avatarImg, name);
