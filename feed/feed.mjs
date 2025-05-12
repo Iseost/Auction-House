@@ -10,7 +10,6 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     const card = document.createElement("div");
     applyTailwindClasses(card, "flex flex-col m-4 p-4 rounded-xl bg-white border border-darkFaded hover:shadow-xl transition-shadow duration-300 cursor-pointer max-w-sm overflow-hidden");
 
-
     const header = document.createElement("div");
     applyTailwindClasses(header, "flex justify-between items-center mb-2");
 
@@ -18,8 +17,11 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     applyTailwindClasses(profile, "flex items-center gap-2");
 
     const avatarImg = document.createElement("img");
-    avatarImg.src = avatar || "./src/assets/image.png";
+    avatarImg.src = (typeof avatar === 'string' && avatar.trim() !== "") ? avatar : "./src/assets/image.png";
     avatarImg.alt = `${sellerName || "User"}'s avatar`;
+    avatarImg.onerror = () => {
+        avatarImg.src = "./src/assets/image.png";
+    };
     applyTailwindClasses(avatarImg, "w-8 h-8 rounded-full object-cover");
 
     const name = document.createElement("span");
@@ -33,7 +35,6 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     applyTailwindClasses(createdDate, "text-xs text-gray-500");
 
     header.append(profile, createdDate);
-
 
     const imageContainer = document.createElement("div");
     applyTailwindClasses(imageContainer, "flex items-center justify-center w-full max-h-[200px] sm:max-h-[240px] h-full cursor-pointer overflow-hidden drop-shadow-darkFaded");
@@ -73,4 +74,5 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     card.append(header, imageContainer, title, smallText, endDate, timer, button);
     content.appendChild(card);
 }
+
 

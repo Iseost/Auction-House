@@ -15,10 +15,14 @@ function displayPosts(posts) {
             post.title,
             post.description,
             post.id,
-            post.endsAt
+            post.endsAt,
+            post.seller?.avatar,
+            post.seller?.name,
+            post.created
         );
     });
 }
+
 
 async function initFeed(query = "") {
     allPosts = await getFeed(localStorage.getItem("accessToken"));

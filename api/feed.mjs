@@ -2,7 +2,7 @@ import { API_AUCTION_LISTINGS, API_KEY } from "../constants.mjs";
 
 
 export async function getFeed(accessToken) {
-    const url = `${API_AUCTION_LISTINGS}?sort=created&sortOrder=desc`;
+    const url = `${API_AUCTION_LISTINGS}?sort=created&sortOrder=desc&_seller=true`;
 
     try {
         const response = await fetch(url, {
@@ -24,3 +24,4 @@ export async function getFeed(accessToken) {
         console.error("Error fetching feed:", error);
     }
 }
+
