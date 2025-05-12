@@ -2,8 +2,10 @@ import { API_AUCTION_LISTINGS, API_KEY } from "../constants.mjs";
 
 
 export async function getFeed(accessToken) {
+    const url = `${API_AUCTION_LISTINGS}?sort=created&sortOrder=desc`;
+
     try {
-        const response = await fetch(API_AUCTION_LISTINGS, {
+        const response = await fetch(url, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${accessToken}`,
