@@ -17,8 +17,8 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     applyTailwindClasses(profile, "flex items-center gap-2");
 
     const avatarImg = document.createElement("img");
-    avatarImg.src = (typeof avatar === 'string' && avatar.trim() !== "") ? avatar : "./src/assets/image.png";
-    avatarImg.alt = `${sellerName || "User"}'s avatar`;
+    avatarImg.src = avatar?.url || "./src/assets/image.png";
+    avatarImg.alt = avatar?.alt || `${sellerName || "User"}'s avatar`;
     avatarImg.addEventListener("click", () => {
         window.location.href = `../profile/profile.html?username=${sellerName || "Unknown"}`;
     });
@@ -67,7 +67,7 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
 
     const endDate = document.createElement("p");
     endDate.innerText = `Ends: ${formatDate(endsAt)}`;
-    applyTailwindClasses(endDate, "text-xs text-gray-500 mt-1");
+    applyTailwindClasses(endDate, "text-xs text-gray-500 mt-1 border-b border-darkFaded");
 
     const timer = auctionTimeLeft(endsAt);
     applyTailwindClasses(timer, "text-sm text-red-600 mt-2");
