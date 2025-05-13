@@ -8,7 +8,7 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     const content = document.getElementById("post_container");
 
     const card = document.createElement("div");
-    applyTailwindClasses(card, "flex flex-col m-4 p-4 rounded-xl bg-white border border-darkFaded hover:shadow-xl transition-shadow duration-300 cursor-pointer max-w-sm overflow-hidden");
+    applyTailwindClasses(card, "flex flex-col m-4 p-4 rounded-xl bg-white/30 backdrop-blur-md border border-white/40 shadow-md transition-all duration-300 transform hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] cursor-pointer max-w-sm overflow-hidden");
 
     const header = document.createElement("div");
     applyTailwindClasses(header, "flex justify-between items-center mb-2");
@@ -78,7 +78,7 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     if (token) {
         const button = document.createElement("button");
         button.innerText = "Make a Bid";
-        applyTailwindClasses(button, "mt-3 bg-Heliotrope text-white px-4 py-2 rounded hover:opacity-90 transition-opacity duration-200");
+        applyTailwindClasses(button, "mt-3 bg-malta text-white px-4 py-2 rounded hover:opacity-90 transition-opacity duration-200");
         button.addEventListener("click", () => {
             window.location.href = `./feed/post.html?postId=${id}`;
         });

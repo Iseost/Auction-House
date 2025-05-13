@@ -3,8 +3,12 @@
 @theme {
   --color-desert_storm: #f5f5f4;
   --color-Blue_Chill: #0d9488;
-  --color-Heliotrope: #8b5cf6;
+  --color-muted_plum: #9e7c9b;
+  --color-hover_plum: #8b6b87;
   --color-allports: #007a9a;
+  --color-hover_allports: #00627b;
+  --color-malta: #bfae9f;
+  --color-hover_malta: #a99889;
   --font-playfair: "Playfair Display", serif;
   --font-EB-Garamond: "EB Garamond", serif;
 }

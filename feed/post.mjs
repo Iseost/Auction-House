@@ -123,12 +123,12 @@ async function displaySinglePost() {
         const bidBtn = document.createElement("button");
         bidBtn.type = "submit";
         bidBtn.textContent = "Bid Me";
-        applyTailwindClasses(bidBtn, "bg-allports hover:bg-blue-700 text-white px-4 py-2 rounded");
+        applyTailwindClasses(bidBtn, "bg-malta hover:bg-hover_malta text-white px-4 py-2 rounded");
 
         const viewBidsBtn = document.createElement("button");
         viewBidsBtn.type = "button";
         viewBidsBtn.textContent = "View Bids";
-        applyTailwindClasses(viewBidsBtn, "bg-allports hover:bg-green-700 text-white px-4 py-2 rounded");
+        applyTailwindClasses(viewBidsBtn, "bg-allports hover:bg-hover_allports text-white px-4 py-2 rounded");
 
         buttonsContainer.appendChild(input);
         buttonsContainer.appendChild(bidBtn);
@@ -152,7 +152,6 @@ async function displaySinglePost() {
         closeLoginPrompt.textContent = "Okay";
         applyTailwindClasses(closeLoginPrompt, "bg-allports hover:bg-blue-700 text-white px-4 py-2 rounded");
 
-        // Når man klikker "Okay" → send til login
         closeLoginPrompt.addEventListener("click", () => {
             window.location.href = "../auth/login.html";
         });
