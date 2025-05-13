@@ -7,7 +7,7 @@ const feedImageWrapper = document.getElementById("feedImageWrapper");
 
 let allPosts = [];
 
-function displayPosts(posts) {
+export function displayPosts(posts) {
     content.innerHTML = "";
     posts.forEach(post => {
         createPostBox(
