@@ -6,14 +6,70 @@ function createHeader() {
     const header = document.querySelector('header');
 
     const nav = document.createElement('nav');
-    nav.className = 'nav-container relative flex justify-between items-center p-4 bg-white shadow';
+    nav.className = 'nav-container flex items-center justify-between p-4 bg-white shadow';
+
+    // 📸 Profilbilde (venstre)
+    const leftSection = document.createElement('div');
+    leftSection.className = 'flex items-center';
+
+    const profileImageLink = document.createElement('a');
+    profileImageLink.href = '../index.html';
+
+    const profileImage = document.createElement('img');
+    profileImage.src = '/src/assets/ChatGPT Image 12. mai 2025, 10_59_34.png';
+
+    profileImage.alt = 'Profile';
+    profileImage.className = 'w-10 h-10 rounded-full object-cover';
+
+    profileImageLink.appendChild(profileImage);
+    leftSection.appendChild(profileImageLink);
+    nav.appendChild(leftSection);
+
+    // 🔍 Søkeform (midten)
+    const centerSection = document.createElement('div');
+    centerSection.className = 'flex-1 flex justify-center';
+
+    const searchForm = document.createElement('form');
+    searchForm.className = 'flex items-center gap-2 max-w-md w-full';
+
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.placeholder = 'Search...';
+    searchInput.className = 'flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-Blue_Chill';
+
+    const searchButton = document.createElement('button');
+    searchButton.type = 'submit';
+    searchButton.textContent = 'Search';
+    searchButton.className = 'bg-Blue_Chill text-white px-4 py-2 rounded hover:bg-Heliotrope';
+
+    searchForm.appendChild(searchInput);
+    searchForm.appendChild(searchButton);
+    centerSection.appendChild(searchForm);
+    nav.appendChild(centerSection);
+
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const query = searchInput.value.trim();
+        if (query) {
+            const searchEvent = new CustomEvent('search', {
+                detail: { query }
+            });
+            document.dispatchEvent(searchEvent);
+        }
+    });
+
+    // 🍔 Burger-knapp (høyre)
+    const rightSection = document.createElement('div');
+    rightSection.className = 'flex items-center';
 
     const burgerButton = document.createElement('button');
-    burgerButton.innerHTML = '&#9776;'; // ☰
+    burgerButton.innerHTML = '&#9776;';
     burgerButton.setAttribute('aria-label', 'Toggle menu');
     burgerButton.className = 'text-3xl text-Blue_Chill z-50';
-    nav.appendChild(burgerButton);
+    rightSection.appendChild(burgerButton);
+    nav.appendChild(rightSection);
 
+    // 📦 Meny (skjult panel)
     const menuWrapper = document.createElement('div');
     menuWrapper.className = `
         fixed top-0 right-0 h-full bg-white shadow-lg 
@@ -23,7 +79,7 @@ function createHeader() {
 
     const creditDisplay = document.createElement('p');
     creditDisplay.id = 'creditsDisplay';
-    creditDisplay.className = 'text-lg text-Blue_Chill font-semibold'; // Du kan justere stilene etter behov
+    creditDisplay.className = 'text-lg text-Blue_Chill font-semibold';
     menuWrapper.appendChild(creditDisplay);
 
     async function updateCreditDisplay() {
@@ -89,34 +145,6 @@ function createHeader() {
 
     menuWrapper.appendChild(menu);
     nav.appendChild(menuWrapper);
-
-    const searchForm = document.createElement('form');
-    searchForm.className = 'absolute right-4 flex items-center gap-2';
-
-    const searchInput = document.createElement('input');
-    searchInput.type = 'text';
-    searchInput.placeholder = 'Search...';
-    searchInput.className = 'border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-Blue_Chill';
-
-    const searchButton = document.createElement('button');
-    searchButton.type = 'submit';
-    searchButton.textContent = 'Search';
-    searchButton.className = 'bg-Blue_Chill text-white px-4 py-2 rounded hover:bg-Heliotrope';
-
-    searchForm.appendChild(searchInput);
-    searchForm.appendChild(searchButton);
-    nav.appendChild(searchForm);
-
-    searchForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const query = searchInput.value.trim();
-        if (query) {
-            const searchEvent = new CustomEvent('search', {
-                detail: { query }
-            });
-            document.dispatchEvent(searchEvent);
-        }
-    });
 
     burgerButton.addEventListener('click', () => {
         menuWrapper.classList.toggle('translate-x-full');
