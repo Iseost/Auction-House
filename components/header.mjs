@@ -8,7 +8,6 @@ function createHeader() {
     const nav = document.createElement('nav');
     nav.className = 'nav-container flex items-center justify-between p-4 bg-white shadow';
 
-    // 📸 Profilbilde (venstre)
     const leftSection = document.createElement('div');
     leftSection.className = 'flex items-center';
 
@@ -25,22 +24,22 @@ function createHeader() {
     leftSection.appendChild(profileImageLink);
     nav.appendChild(leftSection);
 
-    // 🔍 Søkeform (midten)
     const centerSection = document.createElement('div');
-    centerSection.className = 'flex-1 flex justify-center';
+    centerSection.className = 'flex-1 flex justify-center px-4 sm:px-8';
 
     const searchForm = document.createElement('form');
-    searchForm.className = 'flex items-center gap-2 max-w-md w-full';
+
+    searchForm.className = 'flex items-center gap-2 w-full max-w-xl';
 
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
     searchInput.placeholder = 'Search...';
-    searchInput.className = 'flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-Blue_Chill';
+    searchInput.className = 'w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-Blue_Chill';
 
     const searchButton = document.createElement('button');
     searchButton.type = 'submit';
     searchButton.textContent = 'Search';
-    searchButton.className = 'bg-Blue_Chill text-white px-4 py-2 rounded hover:bg-Heliotrope';
+    searchButton.className = 'shrink-0 bg-Blue_Chill text-white px-4 py-2 rounded hover:opacity-90 transition-opacity duration-200';
 
     searchForm.appendChild(searchInput);
     searchForm.appendChild(searchButton);
@@ -56,9 +55,11 @@ function createHeader() {
             });
             document.dispatchEvent(searchEvent);
         }
+
+        searchInput.value = '';
     });
 
-    // 🍔 Burger-knapp (høyre)
+
     const rightSection = document.createElement('div');
     rightSection.className = 'flex items-center';
 
@@ -69,7 +70,6 @@ function createHeader() {
     rightSection.appendChild(burgerButton);
     nav.appendChild(rightSection);
 
-    // 📦 Meny (skjult panel)
     const menuWrapper = document.createElement('div');
     menuWrapper.className = `
         fixed top-0 right-0 h-full bg-white shadow-lg 
