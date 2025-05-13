@@ -1,7 +1,7 @@
 import { getProfile } from "../api/profile.mjs";
 import { showCreatePostModal } from "../postActions/create.mjs";
+import { showEditProfileModal } from "../postActions/edit.mjs";  // Importer funksjonen for å vise modalen
 import { getUserPosts } from "../api/userPosts.mjs";
-
 
 const accessToken = localStorage.getItem("accessToken");
 const username = localStorage.getItem("username");
@@ -72,7 +72,7 @@ async function displayUserPosts(usernameParam, accessToken) {
 
                     const editBtn = document.createElement("button");
                     editBtn.textContent = "Update";
-                    editBtn.className = "bg-Blue_Chill text-white px-3 py-1 text-sm rounded hover:bg-blue-700";
+                    editBtn.className = "bg-Blue_Chill text-white px-3 py-1 text-sm rounded";
                     editBtn.addEventListener("click", () => {
                         window.location.href = `/postActions/updateListing.html?id=${post.id}`;
                     });
@@ -146,9 +146,8 @@ async function displayProfile() {
             const editButton = document.createElement("button");
             editButton.innerText = "Edit Profile";
             applyTailwindClasses(editButton, "bg-Blue_Chill text-white text-sm px-3 py-1 rounded");
-            editButton.addEventListener("click", () => {
-                window.location.href = "../postActions/edit.html";
-            });
+            // Bruk showEditProfileModal for å vise modalen i stedet for å navigere bort
+            editButton.addEventListener("click", showEditProfileModal);
 
             const createButton = document.createElement("button");
             createButton.innerText = "Create Post";

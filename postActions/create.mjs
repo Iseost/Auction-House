@@ -8,7 +8,7 @@ export function showCreatePostModal() {
 
     const modalOverlay = document.createElement("div");
     modalOverlay.id = "createPostModal";
-    modalOverlay.className = "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
+    modalOverlay.className = "fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm";
 
     const modalContent = document.createElement("div");
     modalContent.className = "bg-white p-6 rounded-lg shadow-lg w-full max-w-md";
@@ -52,7 +52,7 @@ export function showCreatePostModal() {
     // Save
     const saveButton = document.createElement("button");
     saveButton.type = "submit";
-    saveButton.className = "bg-[#8B5CF6] text-white py-2 px-4 rounded w-full mt-4 hover:bg-[#7c3aed] transition";
+    saveButton.className = "bg-Blue_Chill hover:bg-Blue_Chill/80 transition text-white py-2 px-4 rounded w-full mt-4";
     saveButton.textContent = "Save";
 
     // Cancel
@@ -116,3 +116,4 @@ export function showCreatePostModal() {
         }
     });
 }
+

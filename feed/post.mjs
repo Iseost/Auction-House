@@ -176,7 +176,7 @@ async function displaySinglePost() {
         // Modal for View Bids
         const modalContainer = document.createElement("div");
         modalContainer.style.display = "none";
-        applyTailwindClasses(modalContainer, "fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center");
+        applyTailwindClasses(modalContainer, "fixed inset-0 bg-opacity-50 flex justify-center items-center backdrop-blur-lg");
 
         const modalContent = document.createElement("div");
         applyTailwindClasses(modalContent, "bg-white p-6 rounded-lg shadow-lg w-80");

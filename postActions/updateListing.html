@@ -15,58 +15,6 @@
       <h1 class="text-3xl font-bold font-['Playfair_Display'] text-center mb-8">
         Edit Listing
       </h1>
-
-      <div class="flex justify-center">
-        <form
-          id="editPostForm"
-          class="flex flex-col items-start w-full max-w-xl space-y-4"
-        >
-          <label class="font-medium" for="edit_title">Title</label>
-          <input
-            type="text"
-            id="edit_title"
-            class="w-full border border-gray-300 rounded px-4 py-2"
-            required
-          />
-
-          <label class="font-medium" for="edit_deadline">Deadline</label>
-          <input
-            type="datetime-local"
-            id="edit_deadline"
-            class="w-full border border-gray-300 rounded px-4 py-2"
-            required
-          />
-
-          <label class="font-medium" for="edit_images">Image URLs</label>
-          <textarea
-            id="edit_images"
-            class="w-full h-[120px] border border-gray-300 rounded px-4 py-2 resize-none"
-          ></textarea>
-
-          <label class="font-medium" for="edit_description">Description</label>
-          <textarea
-            id="edit_description"
-            class="w-full h-[200px] border border-gray-300 rounded px-4 py-2 resize-none"
-          ></textarea>
-
-          <!-- Save Changes -->
-          <button
-            type="submit"
-            class="bg-[#8B5CF6] text-white py-2 px-4 rounded w-full mt-4 hover:bg-[#7c3aed] transition"
-          >
-            Save Changes
-          </button>
-
-          <!-- Delete Button -->
-          <button
-            type="button"
-            id="delete_post"
-            class="bg-red-500 text-white py-2 px-4 rounded w-full mt-4 hover:bg-red-600 transition"
-          >
-            Delete Post
-          </button>
-        </form>
-      </div>
     </main>
 
     <footer></footer>

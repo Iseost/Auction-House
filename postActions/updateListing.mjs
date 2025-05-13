@@ -1,4 +1,4 @@
-import { updatePost, deletePost } from "../api/postActions.mjs";
+import { updatePost } from "../api/postActions.mjs";
 import { getUserPosts } from "../api/userPosts.mjs";
 import { getProfile } from "../api/profile.mjs";
 
@@ -9,96 +9,162 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    try {
+    const accessToken = localStorage.getItem("accessToken");
+    const username = localStorage.getItem("username");
 
-        const accessToken = localStorage.getItem("accessToken");
-        const username = localStorage.getItem("username");
-
-        console.log("Access Token:", accessToken);
-        console.log("Username:", username);
-
-        if (!accessToken || !username) {
-            alert("You are not logged in. Please log in first.");
-            window.location.href = "/login";
-            return;
-        }
-
-        const profile = await getProfile(accessToken, username);
-        console.log("Profile:", profile);
-
-        if (!profile) {
-            alert("Failed to fetch profile.");
-            return;
-        }
-
-
-        const userPosts = await getUserPosts(username, accessToken);
-        console.log("User posts:", userPosts);
-
-        if (!userPosts || userPosts.length === 0) {
-            alert("No posts found for the user.");
-            return;
-        }
-
-
-        const post = userPosts.find(p => p.id.toString() === postId);
-
-        if (!post) {
-            alert("Post not found.");
-            return;
-        }
-
-        document.getElementById("edit_title").value = post.title;
-        document.getElementById("edit_deadline").value = new Date(post.endsAt).toISOString().slice(0, 16);
-        document.getElementById("edit_images").value = post.media.map((img) => img.url).join("\n");
-        document.getElementById("edit_description").value = post.description;
-
-
-        document.getElementById("editPostForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const updatedPost = {
-                title: document.getElementById("edit_title").value.trim(),
-                endsAt: new Date(document.getElementById("edit_deadline").value).toISOString(),
-                media: document
-                    .getElementById("edit_images")
-                    .value.split("\n")
-                    .map((url) => ({ url: url.trim(), alt: `Image for ${post.title}` })),
-                description: document.getElementById("edit_description").value.trim(),
-            };
-
-            if (!updatedPost.title || !updatedPost.endsAt || !updatedPost.media.length || !updatedPost.description) {
-                alert("Please fill in all fields.");
-                return;
-            }
-
-            try {
-                await updatePost(accessToken, postId, updatedPost);
-                alert("Post updated successfully.");
-                window.location.href = "/";
-            } catch (error) {
-                console.error("Error updating post:", error);
-                alert("Something went wrong when updating the post.");
-            }
-        });
-
-
-        document.getElementById("delete_post").addEventListener("click", async () => {
-            const confirmation = confirm("Are you sure you want to delete this post?");
-            if (confirmation) {
-                try {
-                    await deletePost(accessToken, postId);
-                    alert("Post deleted successfully.");
-                    window.location.href = "/";
-                } catch (error) {
-                    console.error("Error deleting post:", error);
-                    alert("Something went wrong when deleting the post.");
-                }
-            }
-        });
-
-    } catch (error) {
-        console.error("Error fetching user profile or posts:", error);
-        alert("Something went wrong when fetching your profile or posts.");
+    if (!accessToken || !username) {
+        alert("You are not logged in. Please log in first.");
+        window.location.href = "/login";
+        return;
     }
+
+    const profile = await getProfile(accessToken, username);
+    if (!profile) {
+        alert("Failed to fetch profile.");
+        return;
+    }
+
+    const userPosts = await getUserPosts(username, accessToken);
+    if (!userPosts || userPosts.length === 0) {
+        alert("No posts found for the user.");
+        return;
+    }
+
+    const post = userPosts.find(p => p.id.toString() === postId);
+    if (!post) {
+        alert("Post not found.");
+        return;
+    }
+
+    const modal = document.createElement("div");
+    modal.id = "editPostModal";
+    modal.classList.add("fixed", "inset-0", "z-50", "hidden", "backdrop-blur-sm");
+    modal.style.backdropFilter = "blur(10px)"; // You can also directly manipulate it through JS for more control
+
+
+    const modalContent = document.createElement("div");
+    modalContent.classList.add("flex", "justify-center", "items-center", "min-h-screen");
+
+    const modalFormContainer = document.createElement("div");
+    modalFormContainer.classList.add("bg-white", "p-8", "rounded-lg", "w-full", "max-w-lg");
+
+    const title = document.createElement("h2");
+    title.classList.add("text-2xl", "font-semibold", "text-center", "mb-6");
+    title.textContent = "Edit Post";
+
+    const form = document.createElement("form");
+    form.id = "editPostForm";
+    form.classList.add("space-y-4");
+
+    const titleLabel = document.createElement("label");
+    titleLabel.setAttribute("for", "edit_title");
+    titleLabel.classList.add("font-medium");
+    titleLabel.textContent = "Title";
+
+    const titleInput = document.createElement("input");
+    titleInput.id = "edit_title";
+    titleInput.type = "text";
+    titleInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-4", "py-2");
+    titleInput.required = true;
+
+    const deadlineLabel = document.createElement("label");
+    deadlineLabel.setAttribute("for", "edit_deadline");
+    deadlineLabel.classList.add("font-medium");
+    deadlineLabel.textContent = "Deadline";
+
+    const deadlineInput = document.createElement("input");
+    deadlineInput.id = "edit_deadline";
+    deadlineInput.type = "datetime-local";
+    deadlineInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-4", "py-2");
+    deadlineInput.required = true;
+
+    const imagesLabel = document.createElement("label");
+    imagesLabel.setAttribute("for", "edit_images");
+    imagesLabel.classList.add("font-medium");
+    imagesLabel.textContent = "Image URLs";
+
+    const imagesTextarea = document.createElement("textarea");
+    imagesTextarea.id = "edit_images";
+    imagesTextarea.classList.add("w-full", "h-[120px]", "border", "border-gray-300", "rounded", "px-4", "py-2", "resize-none");
+
+    const descriptionLabel = document.createElement("label");
+    descriptionLabel.setAttribute("for", "edit_description");
+    descriptionLabel.classList.add("font-medium");
+    descriptionLabel.textContent = "Description";
+
+    const descriptionTextarea = document.createElement("textarea");
+    descriptionTextarea.id = "edit_description";
+    descriptionTextarea.classList.add("w-full", "h-[200px]", "border", "border-gray-300", "rounded", "px-4", "py-2", "resize-none");
+
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.classList.add("flex", "justify-between");
+
+    const saveButton = document.createElement("button");
+    saveButton.type = "submit";
+    saveButton.classList.add("bg-Blue_Chill", "hover:bg-Blue_Chill/80", "text-white", "py-2", "px-4", "rounded", "transition");
+    saveButton.textContent = "Save Changes";
+
+    const cancelButton = document.createElement("button");
+    cancelButton.type = "button";
+    cancelButton.id = "closeModal";
+    cancelButton.classList.add("bg-gray-500", "text-white", "py-2", "px-4", "rounded", "hover:bg-gray-600", "transition");
+    cancelButton.textContent = "Cancel";
+
+    // Append form elements to form
+    form.append(titleLabel, titleInput, deadlineLabel, deadlineInput, imagesLabel, imagesTextarea, descriptionLabel, descriptionTextarea, buttonsContainer);
+    buttonsContainer.append(saveButton, cancelButton);
+
+    // Append everything to the modal
+    modalFormContainer.append(title, form);
+    modalContent.append(modalFormContainer);
+    modal.append(modalContent);
+
+    // Append the modal to the body
+    document.body.append(modal);
+
+    // Pre-fill the form with post data
+    document.getElementById("edit_title").value = post.title;
+    document.getElementById("edit_deadline").value = new Date(post.endsAt).toISOString().slice(0, 16);
+    document.getElementById("edit_images").value = post.media.map((img) => img.url).join("\n");
+    document.getElementById("edit_description").value = post.description;
+
+    // Show the modal
+    modal.classList.remove("hidden");
+
+    // Handle form submission
+    document.getElementById("editPostForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const updatedPost = {
+            title: document.getElementById("edit_title").value.trim(),
+            endsAt: new Date(document.getElementById("edit_deadline").value).toISOString(),
+            media: document
+                .getElementById("edit_images")
+                .value.split("\n")
+                .map((url) => ({ url: url.trim(), alt: `Image for ${post.title}` })),
+            description: document.getElementById("edit_description").value.trim(),
+        };
+
+        if (!updatedPost.title || !updatedPost.endsAt || !updatedPost.media.length || !updatedPost.description) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        try {
+            await updatePost(accessToken, postId, updatedPost);
+            alert("Post updated successfully.");
+            window.location.href = "/";
+        } catch (error) {
+            console.error("Error updating post:", error);
+            alert("Something went wrong when updating the post.");
+        }
+    });
+
+
+    document.getElementById("closeModal").addEventListener("click", () => {
+        window.location.href = "/profile/profile.html?username=" + username;
+        modal.classList.add("hidden");
+    });
+
 });
+
