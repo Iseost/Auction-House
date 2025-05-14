@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const title = document.createElement("h2");
     title.classList.add("text-2xl", "font-semibold", "text-center", "mb-6");
-    title.textContent = "Edit Post";
+    title.textContent = "Edit Listing";
 
     const form = document.createElement("form");
     form.id = "editPostForm";
