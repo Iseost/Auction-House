@@ -1,6 +1,7 @@
 import { getProfile } from "../api/profile.mjs";
 import { showCreatePostModal } from "../postActions/create.mjs";
 import { getUserPosts } from "../api/userPosts.mjs";
+import { formatDate, auctionTimeLeft } from "../components/timer.mjs";
 
 const accessToken = localStorage.getItem("accessToken");
 const username = localStorage.getItem("username");
@@ -15,85 +16,6 @@ export function displayGlobalCredits() {
     const creditsBar = document.createElement("div");
     creditsBar.id = "credits_bar";
     document.body.insertAdjacentElement("afterbegin", creditsBar);
-}
-
-async function displayUserPosts(usernameParam, accessToken,) {
-    const postContainer = document.createElement("div");
-    postContainer.id = "post_container";
-    postContainer.className = "grid sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4";
-
-    try {
-        const posts = await getUserPosts(usernameParam, accessToken);
-
-        if (posts && posts.length > 0) {
-            posts.forEach((post) => {
-                const card = document.createElement("div");
-                card.className = "flex flex-col m-4 p-4 rounded-xl bg-white/30 backdrop-blur-md border border-white/40 shadow-md transition-all duration-300 transform hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] cursor-pointer max-w-sm overflow-hidden";
-
-                const contentWrapper = document.createElement("div");
-                contentWrapper.className = "flex-grow";
-
-                const img = document.createElement("img");
-                img.src = post.media?.[0]?.url || "default-post.jpg";
-                img.alt = post.media?.[0]?.alt || "Post image";
-                img.className = "w-full rounded mb-2";
-
-                const title = document.createElement("h2");
-                title.textContent = post.title;
-                applyTailwindClasses(title, "text-xl font-semibold");
-
-                const description = document.createElement("p");
-                description.textContent = post.description;
-                applyTailwindClasses(description, "text-gray-600 mt-1");
-
-                const createdAt = document.createElement("p");
-                createdAt.textContent = `Created: ${new Date(post.created).toLocaleString()}`;
-                applyTailwindClasses(createdAt, "text-xs text-gray-500 mt-2");
-
-                const updatedAt = document.createElement("p");
-                updatedAt.textContent = `Updated: ${new Date(post.updated).toLocaleString()}`;
-                applyTailwindClasses(updatedAt, "text-xs text-gray-500");
-
-                const endsAt = document.createElement("p");
-                endsAt.textContent = `Ends at: ${new Date(post.endsAt).toLocaleString()}`;
-                applyTailwindClasses(endsAt, "text-xs text-red-500 font-medium");
-
-                const bids = document.createElement("p");
-                bids.textContent = `Bids: ${post._count?.bids || 0}`;
-                applyTailwindClasses(bids, "text-sm font-semibold text-blue-800 mt-2");
-
-                contentWrapper.append(img, title, description, createdAt, updatedAt, endsAt, bids);
-                card.appendChild(contentWrapper);
-
-                if (post.seller.name === username) {
-                    const buttonWrapper = document.createElement("div");
-                    buttonWrapper.className = "flex justify-end mt-4";
-
-                    const editBtn = document.createElement("button");
-                    editBtn.textContent = "Update";
-                    editBtn.className = "bg-Blue_Chill text-white px-3 py-1 text-sm rounded hover:bg-blue-700";
-                    editBtn.addEventListener("click", () => {
-                        window.location.href = `/postActions/updateListing.html?id=${post.id}`;
-                    });
-
-                    buttonWrapper.appendChild(editBtn);
-                    card.appendChild(buttonWrapper);
-                }
-
-                postContainer.appendChild(card);
-            });
-        } else {
-            const noPosts = document.createElement("p");
-            noPosts.textContent = "No posts to display.";
-            applyTailwindClasses(noPosts, "text-gray-500 text-sm m-4");
-            postContainer.appendChild(noPosts);
-        }
-
-        const main = document.querySelector("main");
-        main.appendChild(postContainer);
-    } catch (error) {
-        console.error("Error fetching user posts:", error);
-    }
 }
 
 async function displayProfile() {
@@ -164,6 +86,112 @@ async function displayProfile() {
         console.error("Error displaying profile:", error);
     }
 }
+
+async function displayUserPosts(usernameParam, accessToken) {
+    const postContainer = document.createElement("div");
+    postContainer.id = "post_container";
+    postContainer.className = "grid sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4";
+
+    try {
+        const posts = await getUserPosts(usernameParam, accessToken);
+
+        if (posts && posts.length > 0) {
+            posts.forEach((post) => {
+                const card = document.createElement("div");
+                applyTailwindClasses(card, "flex flex-col m-4 p-4 rounded-xl bg-white/30 backdrop-blur-md border border-white/40 shadow-md transition-all duration-300 transform hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] cursor-pointer max-w-sm overflow-hidden");
+
+                const header = document.createElement("div");
+                applyTailwindClasses(header, "flex justify-between items-center mb-2");
+
+                const profile = document.createElement("div");
+                applyTailwindClasses(profile, "flex items-center gap-2");
+
+                const avatarImg = document.createElement("img");
+                avatarImg.src = post.seller.avatar?.url || "./src/assets/image.png";
+                avatarImg.alt = post.seller.avatar?.alt || `${post.seller.name || "User"}'s avatar`;
+                avatarImg.addEventListener("click", () => {
+                    window.location.href = `/`;
+                });
+                avatarImg.style.cursor = "pointer";
+                avatarImg.onerror = () => {
+                    avatarImg.src = "./src/assets/image.png";
+                };
+                applyTailwindClasses(avatarImg, "w-8 h-8 rounded-full object-cover");
+
+                const name = document.createElement("span");
+                name.innerText = post.seller.name || "Unknown";
+                name.addEventListener("click", () => {
+                    window.location.href = `/`;
+                });
+                name.style.cursor = "pointer";
+                applyTailwindClasses(name, "text-sm font-medium text-gray-800");
+
+                profile.append(avatarImg, name);
+
+                const createdDate = document.createElement("span");
+                createdDate.innerText = `Created: ${formatDate(post.created)}`;
+                applyTailwindClasses(createdDate, "text-xs text-gray-500");
+
+                header.append(profile, createdDate);
+
+                const imageContainer = document.createElement("div");
+                applyTailwindClasses(imageContainer, "flex items-center justify-center w-full max-h-[200px] sm:max-h-[240px] h-full cursor-pointer overflow-hidden drop-shadow-darkFaded");
+
+                const postImage = document.createElement("img");
+                postImage.src = post.media?.[0]?.url || "./src/assets/image.png";
+                postImage.alt = "Post Image";
+                applyTailwindClasses(postImage, "object-cover w-full h-full hover:scale-110 transition-transform duration-300");
+                postImage.addEventListener("click", () => {
+                    window.location.href = `../feed/post.html?postId=${post.id}`;
+                });
+
+                imageContainer.appendChild(postImage);
+
+                const title = document.createElement("h2");
+                title.innerText = post.title;
+                applyTailwindClasses(title, "text-xl font-semibold mt-4 line-clamp-1");
+
+                const description = document.createElement("p");
+                description.innerText = post.description;
+                applyTailwindClasses(description, "text-gray-600 mt-2 text-sm line-clamp-2 border-b border-darkFaded dark:border-whiteFaded pb-2");
+
+                const endsAt = document.createElement("p");
+                endsAt.innerText = `Ends: ${formatDate(post.endsAt)}`;
+                applyTailwindClasses(endsAt, "text-xs text-gray-500 mt-1 border-b border-darkFaded");
+
+                const timer = auctionTimeLeft(post.endsAt);
+                applyTailwindClasses(timer, "text-sm text-red-600 mt-2");
+
+                card.append(header, imageContainer, title, description, endsAt, timer);
+
+                if (post.seller.name === username) {
+                    const button = document.createElement("button");
+                    button.innerText = "Make a Bid";
+                    applyTailwindClasses(button, "mt-3 bg-malta text-white px-4 py-2 rounded hover:opacity-90 transition-opacity duration-200");
+                    button.addEventListener("click", () => {
+                        window.location.href = `./feed/post.html?postId=${post.id}`;
+                    });
+                    card.appendChild(button);
+                }
+
+                postContainer.appendChild(card);
+            });
+        } else {
+            const noPosts = document.createElement("p");
+            noPosts.textContent = "No posts to display.";
+            applyTailwindClasses(noPosts, "text-gray-500 text-sm m-4");
+            postContainer.appendChild(noPosts);
+        }
+
+        const main = document.querySelector("main");
+        main.appendChild(postContainer);
+    } catch (error) {
+        console.error("Error fetching user posts:", error);
+    }
+}
+
+
+
 
 displayGlobalCredits();
 await displayProfile();
