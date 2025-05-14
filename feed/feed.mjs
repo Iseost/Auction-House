@@ -4,6 +4,8 @@ function applyTailwindClasses(element, classNames) {
     element.classList.add(...classNames.split(" "));
 }
 
+
+
 export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avatar, sellerName, created) {
     const content = document.getElementById("post_container");
 
@@ -20,7 +22,11 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     avatarImg.src = avatar?.url || "./src/assets/image.png";
     avatarImg.alt = avatar?.alt || `${sellerName || "User"}'s avatar`;
     avatarImg.addEventListener("click", () => {
-        window.location.href = `../profile/userProfile.html?username=${sellerName || "Unknown"}`;
+        if (sellerName === currentUser) {
+            window.location.href = `../profile/profile.html?username=${currentUser}`; // Naviger til den innloggede brukerens profil
+        } else {
+            window.location.href = `../profile/userProfile.html?username=${sellerName || "Unknown"}`;
+        }
     });
     avatarImg.style.cursor = "pointer";
     avatarImg.onerror = () => {
@@ -31,7 +37,11 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     const name = document.createElement("span");
     name.innerText = sellerName || "Unknown";
     name.addEventListener("click", () => {
-        window.location.href = `../profile/userProfile.html?username=${sellerName || "Unknown"}`;
+        if (sellerName === currentUser) {
+            window.location.href = `../profile/profile.html?username=${currentUser}`;
+        } else {
+            window.location.href = `../profile/userProfile.html?username=${sellerName || "Unknown"}`;
+        }
     });
     name.style.cursor = "pointer";
     applyTailwindClasses(name, "text-sm font-medium text-gray-800");
@@ -75,15 +85,25 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     card.append(header, imageContainer, title, smallText, endDate, timer);
 
     const token = localStorage.getItem("accessToken");
+    const currentUser = localStorage.getItem("username"); // Hent brukernavnet til den innloggede brukeren
+
     if (token) {
         const button = document.createElement("button");
         button.innerText = "Make a Bid";
-        applyTailwindClasses(button, "mt-3 bg-malta text-white px-4 py-2 rounded hover:opacity-90 transition-opacity duration-200");
-        button.addEventListener("click", () => {
-            window.location.href = `./feed/post.html?postId=${id}`;
-        });
+
+        // Hvis posten tilhører den innloggede brukeren, skjul "Make a Bid"-knappen
+        if (sellerName === currentUser) {
+            button.style.display = "none";
+        } else {
+            applyTailwindClasses(button, "mt-3 bg-malta text-white px-4 py-2 rounded hover:opacity-90 transition-opacity duration-200");
+            button.addEventListener("click", () => {
+                window.location.href = `./feed/post.html?postId=${id}`;
+            });
+        }
+
         card.appendChild(button);
     }
 
     content.appendChild(card);
 }
+

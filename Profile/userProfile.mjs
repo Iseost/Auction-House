@@ -110,13 +110,19 @@ async function displayUserPosts(usernameParam, accessToken) {
                 avatarImg.src = post.seller.avatar?.url || "./src/assets/image.png";
                 avatarImg.alt = post.seller.avatar?.alt || `${post.seller.name || "User"}'s avatar`;
                 avatarImg.addEventListener("click", () => {
-                    window.location.href = `/`;
+                    // Hvis posten tilhører den innloggede brukeren, naviger til profil-siden i stedet
+                    if (post.seller.name === username) {
+                        window.location.href = `/profile/userProfile.html?username=${username}`;
+                    } else {
+                        window.location.href = `../profile/userProfile.html?username=${post.seller.name || "Unknown"}`;
+                    }
                 });
                 avatarImg.style.cursor = "pointer";
                 avatarImg.onerror = () => {
                     avatarImg.src = "./src/assets/image.png";
                 };
                 applyTailwindClasses(avatarImg, "w-8 h-8 rounded-full object-cover");
+
 
                 const name = document.createElement("span");
                 name.innerText = post.seller.name || "Unknown";
