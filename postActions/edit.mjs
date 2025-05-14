@@ -4,26 +4,21 @@ const accessToken = localStorage.getItem("accessToken");
 const username = localStorage.getItem("username");
 
 export function showEditProfileModal() {
-    // Create modal overlay
     const modalOverlay = document.createElement("div");
     modalOverlay.id = "editProfileModal";
     modalOverlay.className = "fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm"; // Added backdrop-filter
 
-    // Create modal content
     const modalContent = document.createElement("div");
     modalContent.className = "bg-white p-6 rounded-lg shadow-lg w-full max-w-xl";
 
-    // Create modal title
     const modalTitle = document.createElement("h2");
     modalTitle.className = "text-2xl font-bold font-['Playfair_Display'] text-center mb-6";
     modalTitle.textContent = "Edit Your Profile";
 
-    // Create form
     const form = document.createElement("form");
     form.id = "editProfileForm";
     form.classList.add("flex", "flex-col", "items-start", "w-full", "space-y-4");
 
-    // Name input
     const nameInput = document.createElement("input");
     nameInput.type = "text";
     nameInput.id = "edit_name";
@@ -31,21 +26,18 @@ export function showEditProfileModal() {
     nameInput.className = "w-full border border-gray-300 rounded px-4 py-2";
     nameInput.required = true;
 
-    // Avatar input
     const avatarInput = document.createElement("input");
     avatarInput.type = "url";
     avatarInput.id = "edit_avatar";
     avatarInput.placeholder = "Enter Avatar URL";
     avatarInput.className = "w-full border border-gray-300 rounded px-4 py-2";
 
-    // Banner input
     const bannerInput = document.createElement("input");
     bannerInput.type = "url";
     bannerInput.id = "edit_banner";
     bannerInput.placeholder = "Enter Banner URL";
     bannerInput.className = "w-full border border-gray-300 rounded px-4 py-2";
 
-    // Save button
     const saveButton = document.createElement("button");
     saveButton.type = "button";
     saveButton.id = "save_edit";

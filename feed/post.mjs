@@ -173,7 +173,6 @@ async function displaySinglePost() {
             onPlaceBid(e);
         });
 
-        // Modal for View Bids
         const modalContainer = document.createElement("div");
         modalContainer.style.display = "none";
         applyTailwindClasses(modalContainer, "fixed inset-0 bg-opacity-50 flex justify-center items-center backdrop-blur-lg");

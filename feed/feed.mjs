@@ -4,8 +4,6 @@ function applyTailwindClasses(element, classNames) {
     element.classList.add(...classNames.split(" "));
 }
 
-
-
 export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avatar, sellerName, created) {
     const content = document.getElementById("post_container");
 
@@ -23,8 +21,7 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     avatarImg.alt = avatar?.alt || `${sellerName || "User"}'s avatar`;
     avatarImg.addEventListener("click", () => {
         if (sellerName === currentUser) {
-            window.location.href = `../profile/profile.html?username=${currentUser}`; // Naviger til den innloggede brukerens profil
-        } else {
+            window.location.href = `../profile/profile.html?username=${currentUser}`;
             window.location.href = `../profile/userProfile.html?username=${sellerName || "Unknown"}`;
         }
     });
@@ -85,13 +82,12 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     card.append(header, imageContainer, title, smallText, endDate, timer);
 
     const token = localStorage.getItem("accessToken");
-    const currentUser = localStorage.getItem("username"); // Hent brukernavnet til den innloggede brukeren
+    const currentUser = localStorage.getItem("username");
 
     if (token) {
         const button = document.createElement("button");
         button.innerText = "Make a Bid";
 
-        // Hvis posten tilhører den innloggede brukeren, skjul "Make a Bid"-knappen
         if (sellerName === currentUser) {
             button.style.display = "none";
         } else {

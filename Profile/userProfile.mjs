@@ -110,7 +110,6 @@ async function displayUserPosts(usernameParam, accessToken) {
                 avatarImg.src = post.seller.avatar?.url || "./src/assets/image.png";
                 avatarImg.alt = post.seller.avatar?.alt || `${post.seller.name || "User"}'s avatar`;
                 avatarImg.addEventListener("click", () => {
-                    // Hvis posten tilhører den innloggede brukeren, naviger til profil-siden i stedet
                     if (post.seller.name === username) {
                         window.location.href = `/profile/userProfile.html?username=${username}`;
                     } else {
@@ -195,9 +194,6 @@ async function displayUserPosts(usernameParam, accessToken) {
         console.error("Error fetching user posts:", error);
     }
 }
-
-
-
 
 displayGlobalCredits();
 await displayProfile();

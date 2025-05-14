@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const modal = document.createElement("div");
     modal.id = "editPostModal";
     modal.classList.add("fixed", "inset-0", "z-50", "hidden", "backdrop-blur-sm");
-    modal.style.backdropFilter = "blur(10px)"; // You can also directly manipulate it through JS for more control
+    modal.style.backdropFilter = "blur(10px)";
 
 
     const modalContent = document.createElement("div");
@@ -110,28 +110,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     cancelButton.classList.add("bg-gray-500", "text-white", "py-2", "px-4", "rounded", "hover:bg-gray-600", "transition");
     cancelButton.textContent = "Cancel";
 
-    // Append form elements to form
     form.append(titleLabel, titleInput, deadlineLabel, deadlineInput, imagesLabel, imagesTextarea, descriptionLabel, descriptionTextarea, buttonsContainer);
     buttonsContainer.append(saveButton, cancelButton);
 
-    // Append everything to the modal
     modalFormContainer.append(title, form);
     modalContent.append(modalFormContainer);
     modal.append(modalContent);
 
-    // Append the modal to the body
     document.body.append(modal);
 
-    // Pre-fill the form with post data
     document.getElementById("edit_title").value = post.title;
     document.getElementById("edit_deadline").value = new Date(post.endsAt).toISOString().slice(0, 16);
     document.getElementById("edit_images").value = post.media.map((img) => img.url).join("\n");
     document.getElementById("edit_description").value = post.description;
 
-    // Show the modal
     modal.classList.remove("hidden");
 
-    // Handle form submission
     document.getElementById("editPostForm").addEventListener("submit", async (e) => {
         e.preventDefault();
 

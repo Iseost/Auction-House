@@ -1,6 +1,5 @@
 import { API_AUCTION_LISTINGS, API_KEY } from "../constants.mjs";
 
-// Create listing
 export async function createPost(accessToken, postData) {
     try {
         const response = await fetch(API_AUCTION_LISTINGS, {
@@ -25,8 +24,6 @@ export async function createPost(accessToken, postData) {
 }
 
 
-// update
-
 export async function updatePost(accessToken, postId, postData) {
     try {
         const response = await fetch(`${API_AUCTION_LISTINGS}/${postId}`, {
@@ -49,8 +46,6 @@ export async function updatePost(accessToken, postId, postData) {
         console.error("Error updating post:", error);
     }
 }
-
-// delete
 
 export async function deletePost(accessToken, postId) {
     try {

@@ -3,7 +3,7 @@ export function renderBidList(bids) {
     bidList.className = "space-y-3 text-sm text-gray-700 dark:text-gray-300";
 
     bids
-        .sort((a, b) => new Date(b.created) - new Date(a.created)) // Nyeste bud først
+        .sort((a, b) => new Date(b.created) - new Date(a.created))
         .forEach((bid) => {
             const listItem = document.createElement("li");
             listItem.className = "flex items-center gap-3";

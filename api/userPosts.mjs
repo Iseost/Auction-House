@@ -18,7 +18,7 @@ export async function getUserPosts(username, accessToken) {
         }
 
         const json = await response.json();
-        return json.data; // viktig: .data gir deg arrayen med posts
+        return json.data;
     } catch (error) {
         console.error("Error fetching user posts:", error);
     }
