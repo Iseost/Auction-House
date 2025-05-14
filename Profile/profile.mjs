@@ -255,13 +255,12 @@ async function displayProfile() {
 
         if (usernameParam === username) {
             const editButton = document.createElement("button");
-            editButton.innerText = "Edit Profile";
+            editButton.innerText = "Edit your Profile";
             applyTailwindClasses(editButton, "bg-Blue_Chill text-white text-sm px-3 py-1 rounded");
-            // Bruk showEditProfileModal for å vise modalen
             editButton.addEventListener("click", showEditProfileModal);
 
             const createButton = document.createElement("button");
-            createButton.innerText = "Create Post";
+            createButton.innerText = "Create a new listing";
             applyTailwindClasses(createButton, "bg-Blue_Chill text-white text-sm px-3 py-1 rounded");
             createButton.addEventListener("click", showCreatePostModal);
 

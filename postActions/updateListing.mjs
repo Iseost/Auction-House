@@ -1,4 +1,4 @@
-import { updatePost } from "../api/postActions.mjs";
+import { updatePost, deletePost } from "../api/postActions.mjs";
 import { getUserPosts } from "../api/userPosts.mjs";
 import { getProfile } from "../api/profile.mjs";
 
@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     modal.id = "editPostModal";
     modal.classList.add("fixed", "inset-0", "z-50", "hidden", "backdrop-blur-sm");
     modal.style.backdropFilter = "blur(10px)";
-
 
     const modalContent = document.createElement("div");
     modalContent.classList.add("flex", "justify-center", "items-center", "min-h-screen");
@@ -97,7 +96,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     descriptionTextarea.classList.add("w-full", "h-[200px]", "border", "border-gray-300", "rounded", "px-4", "py-2", "resize-none");
 
     const buttonsContainer = document.createElement("div");
-    buttonsContainer.classList.add("flex", "justify-between");
+    buttonsContainer.classList.add("flex", "justify-between", "flex-wrap", "gap-2");
 
     const saveButton = document.createElement("button");
     saveButton.type = "submit";
@@ -110,13 +109,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     cancelButton.classList.add("bg-gray-500", "text-white", "py-2", "px-4", "rounded", "hover:bg-gray-600", "transition");
     cancelButton.textContent = "Cancel";
 
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.classList.add("bg-red-600", "hover:bg-red-700", "text-white", "py-2", "px-4", "rounded", "transition");
+    deleteButton.textContent = "Delete Post";
+
+    buttonsContainer.append(saveButton, cancelButton, deleteButton);
     form.append(titleLabel, titleInput, deadlineLabel, deadlineInput, imagesLabel, imagesTextarea, descriptionLabel, descriptionTextarea, buttonsContainer);
-    buttonsContainer.append(saveButton, cancelButton);
 
     modalFormContainer.append(title, form);
     modalContent.append(modalFormContainer);
     modal.append(modalContent);
-
     document.body.append(modal);
 
     document.getElementById("edit_title").value = post.title;
@@ -135,6 +138,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             media: document
                 .getElementById("edit_images")
                 .value.split("\n")
+                .filter(url => url.trim() !== "")
                 .map((url) => ({ url: url.trim(), alt: `Image for ${post.title}` })),
             description: document.getElementById("edit_description").value.trim(),
         };
@@ -154,11 +158,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-
     document.getElementById("closeModal").addEventListener("click", () => {
         window.location.href = "/profile/profile.html?username=" + username;
         modal.classList.add("hidden");
     });
 
-});
+    deleteButton.addEventListener("click", async () => {
+        const confirmDelete = confirm("Are you sure you want to delete this post?");
+        if (!confirmDelete) return;
 
+        try {
+            await deletePost(accessToken, postId);
+            alert("Post deleted successfully.");
+            window.location.href = "/profile/profile.html?username=" + username;
+        } catch (error) {
+            console.error("Error deleting post:", error);
+            alert("Something went wrong when deleting the post.");
+        }
+    });
+});

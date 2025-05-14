@@ -22,6 +22,8 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     avatarImg.addEventListener("click", () => {
         if (sellerName === currentUser) {
             window.location.href = `../profile/profile.html?username=${currentUser}`;
+        }
+        else {
             window.location.href = `../profile/userProfile.html?username=${sellerName || "Unknown"}`;
         }
     });
