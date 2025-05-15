@@ -60,11 +60,17 @@ export function createPostBox(coverImage, postTitle, postBody, id, endsAt, avata
     postImage.src = coverImage || "./src/assets/image.png";
     postImage.alt = "Post Image";
     applyTailwindClasses(postImage, "object-cover w-full h-full hover:scale-110 transition-transform duration-300");
+
+    postImage.onerror = () => {
+        postImage.src = "./src/assets/image.png";
+    };
+
     postImage.addEventListener("click", () => {
         window.location.href = `./feed/post.html?postId=${id}`;
     });
 
     imageContainer.appendChild(postImage);
+
 
     const title = document.createElement("h2");
     title.innerText = postTitle;

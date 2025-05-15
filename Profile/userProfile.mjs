@@ -143,7 +143,7 @@ async function displayUserPosts(usernameParam, accessToken) {
                 applyTailwindClasses(imageContainer, "flex items-center justify-center w-full max-h-[200px] sm:max-h-[240px] h-full cursor-pointer overflow-hidden drop-shadow-darkFaded");
 
                 const postImage = document.createElement("img");
-                postImage.src = post.media?.[0]?.url || "./src/assets/image.png";
+                postImage.src = post.media?.[0]?.url || "/src/assets/image.png";
                 postImage.alt = "Post Image";
                 applyTailwindClasses(postImage, "object-cover w-full h-full hover:scale-110 transition-transform duration-300");
                 postImage.addEventListener("click", () => {

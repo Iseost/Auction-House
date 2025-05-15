@@ -40,6 +40,11 @@ async function displaySinglePost() {
         img.alt = post.media?.[0]?.alt || "Post image";
         applyTailwindClasses(img, "w-full h-auto object-cover rounded");
 
+        img.onerror = () => {
+            img.src = "../src/assets/image.png";
+        };
+
+
         const contentContainer = document.createElement("div");
         applyTailwindClasses(contentContainer, "py-6 space-y-6");
 
@@ -135,7 +140,6 @@ async function displaySinglePost() {
         buttonsContainer.appendChild(viewBidsBtn);
         form.appendChild(buttonsContainer);
 
-        // Legg til login-prompt modal
         const loginPromptModal = document.createElement("div");
         loginPromptModal.id = "loginPromptModal";
         loginPromptModal.style.display = "none";
