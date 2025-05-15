@@ -33,7 +33,7 @@ async function displaySinglePost() {
         }
 
         const container = document.createElement("div");
-        applyTailwindClasses(container, "w-full max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md");
+        applyTailwindClasses(container, "max-w-5xl mx-auto bg-white rounded-lg shadow-md overflow-hidden md:flex md:space-x-6 p-6");
 
         const img = document.createElement("img");
         img.src = post.media?.[0]?.url || "../src/assets/image.png";
