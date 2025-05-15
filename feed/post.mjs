@@ -70,11 +70,11 @@ async function displaySinglePost() {
 
         const title = document.createElement("h1");
         title.textContent = post.title;
-        applyTailwindClasses(title, "text-2xl font-bold text-gray-900");
+        applyTailwindClasses(title, "text-2xl font-bold text-gray-800");
 
         const body = document.createElement("p");
         body.textContent = post.description || post.body || "No description.";
-        applyTailwindClasses(body, "text-gray-700 leading-relaxed border-b border-darkFaded");
+        applyTailwindClasses(body, "text-gray-600 leading-relaxed border-b border-darkFaded");
 
         const auction = document.createElement("div");
         applyTailwindClasses(auction, "space-y-2");

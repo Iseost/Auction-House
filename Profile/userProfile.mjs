@@ -52,7 +52,7 @@ async function displayProfile() {
 
         const nameHeading = document.createElement("h1");
         nameHeading.textContent = profile.data.name;
-        applyTailwindClasses(nameHeading, "text-2xl font-bold");
+        applyTailwindClasses(nameHeading, "text-2xl font-bold text-gray-800");
 
         const creditsParagraph = document.createElement("p");
         creditsParagraph.innerHTML = `<strong>Credits:</strong> ${profile.data.credits}`;
