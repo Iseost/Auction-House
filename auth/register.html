@@ -23,6 +23,8 @@
             class="p-2 border rounded-md"
             type="text"
             placeholder="Username"
+            required
+            minlength="3"
             id="register_username"
           />
           <label for="register_email">Email Address</label>
@@ -30,6 +32,7 @@
             class="p-2 border rounded-md"
             type="email"
             id="register_email"
+            required
             placeholder="name@example.com"
           />
 
@@ -38,6 +41,8 @@
             class="p-2 border rounded-md"
             type="password"
             id="register_password"
+            required
+            minlength="8"
             placeholder="Password"
           />
           <button
