@@ -30,7 +30,6 @@ async function displayUserPosts(usernameParam, accessToken) {
         if (posts && posts.length > 0) {
             posts.forEach((post) => {
                 const card = document.createElement("div");
-                // Endret klassene her for å matche de fra userPost.mjs
                 applyTailwindClasses(card, "flex flex-col m-4 p-4 rounded-xl bg-white/30 backdrop-blur-md border border-white/40 shadow-md transition-all duration-300 transform hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] cursor-pointer max-w-sm overflow-hidden");
 
                 const header = document.createElement("div");
@@ -43,7 +42,6 @@ async function displayUserPosts(usernameParam, accessToken) {
                 avatarImg.src = post.seller.avatar?.url || "./src/assets/image.png";
                 avatarImg.alt = post.seller.avatar?.alt || `${post.seller.name || "User"}'s avatar`;
                 avatarImg.addEventListener("click", () => {
-                    // Hvis posten tilhører den innloggede brukeren, naviger til profil-siden i stedet
                     if (post.seller.name === username) {
                         window.location.href = `/profile/userProfile.html?username=${username}`;
                     } else {

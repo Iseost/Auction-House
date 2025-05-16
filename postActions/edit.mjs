@@ -6,7 +6,7 @@ const username = localStorage.getItem("username");
 export function showEditProfileModal() {
     const modalOverlay = document.createElement("div");
     modalOverlay.id = "editProfileModal";
-    modalOverlay.className = "fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm"; // Added backdrop-filter
+    modalOverlay.className = "fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm";
 
     const modalContent = document.createElement("div");
     modalContent.className = "bg-white p-6 rounded-lg shadow-lg w-full max-w-xl";

@@ -60,8 +60,6 @@ export async function deletePost(accessToken, postId) {
         if (!response.ok) {
             throw new Error(`Failed to delete post. Status: ${response.status}`);
         }
-
-        console.log("Post deleted successfully");
     } catch (error) {
         console.error("Error deleting post:", error);
     }

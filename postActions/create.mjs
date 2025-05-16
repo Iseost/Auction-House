@@ -20,7 +20,6 @@ export function showCreatePostModal() {
     const form = document.createElement("form");
     form.classList.add("flex", "flex-col", "items-start", "w-full", "space-y-4");
 
-    // Title
     const titleInput = document.createElement("input");
     titleInput.type = "text";
     titleInput.id = "create_title";
@@ -28,34 +27,29 @@ export function showCreatePostModal() {
     titleInput.className = "w-full border border-gray-300 rounded px-4 py-2";
     titleInput.required = true;
 
-    // Deadline
     const deadlineInput = document.createElement("input");
     deadlineInput.type = "datetime-local";
     deadlineInput.id = "create_deadline";
     deadlineInput.className = "w-full border border-gray-300 rounded px-4 py-2";
     deadlineInput.required = true;
 
-    // Image URLs
     const imagesTextarea = document.createElement("textarea");
     imagesTextarea.id = "create_images";
     imagesTextarea.placeholder = "Enter image URLs, one per line";
     imagesTextarea.className = "w-full h-[120px] border border-gray-300 rounded px-4 py-2 resize-none";
     imagesTextarea.required = true;
 
-    // Description
     const descriptionTextarea = document.createElement("textarea");
     descriptionTextarea.id = "create_description";
     descriptionTextarea.placeholder = "Describe your item in detail";
     descriptionTextarea.className = "w-full h-[200px] border border-gray-300 rounded px-4 py-2 resize-none";
     descriptionTextarea.required = true;
 
-    // Save
     const saveButton = document.createElement("button");
     saveButton.type = "submit";
     saveButton.className = "bg-Blue_Chill hover:bg-Blue_Chill/80 transition text-white py-2 px-4 rounded w-full mt-4";
     saveButton.textContent = "Save";
 
-    // Cancel
     const cancelButton = document.createElement("button");
     cancelButton.type = "button";
     cancelButton.className = "bg-gray-300 text-black py-2 px-4 rounded w-full mt-4 hover:bg-gray-400 transition";
