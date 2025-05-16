@@ -26,23 +26,24 @@
 ### Prerequisites
 
 - Node.js
-- I you don't have Node.js, downloade it her --> https://nodejs.org/en
+- I you don't have Node.js, downloade it her --> [Node.js](https://nodejs.org/en)
 
 - ### Installation
 
 **Clone the repository**:
 
 1. Clone repository
+   ```bash
    git clone https://github.com/your-username/auction-house.git
    cd auction-house
-
+    ```
    Or: open with Githib Desktop
    
-3. Install despendencies: npm install
-4. Run the devolopment: npm run dev
+3. Install despendencies: `npm install`
+4. Run the devolopment: `npm run dev`
 
 ## Live demo
 
-Link to demo site - https://auctionhouse-sp2.netlify.app/
+Link to demo site - [auctionhouse](https://auctionhouse-sp2.netlify.app/)
 
 
