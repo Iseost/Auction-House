@@ -33,17 +33,16 @@ async function displaySinglePost() {
         }
 
         const container = document.createElement("div");
-        applyTailwindClasses(container, "max-w-5xl mx-auto bg-white rounded-lg shadow-md overflow-hidden md:flex md:space-x-6 p-6");
+        applyTailwindClasses(container, "bg-white shadow-lg rounded-lg p-6 o my-8");
 
         const img = document.createElement("img");
         img.src = post.media?.[0]?.url || "../src/assets/image.png";
         img.alt = post.media?.[0]?.alt || "Post image";
-        applyTailwindClasses(img, "w-full h-auto object-cover rounded");
+        applyTailwindClasses(img, "w-full");
 
         img.onerror = () => {
             img.src = "../src/assets/image.png";
         };
-
 
         const contentContainer = document.createElement("div");
         applyTailwindClasses(contentContainer, "py-6 space-y-6");
@@ -267,3 +266,5 @@ async function displaySinglePost() {
 }
 
 displaySinglePost();
+
+
