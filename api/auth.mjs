@@ -18,8 +18,8 @@ export async function register(email, password, name) {
 
 
         if (data.status === 201) {
-            window.location.replace('../index.html');
             alert('Welcome! You will now be sent back to the login.')
+            window.location.replace('../index.html');
         } else {
             document.getElementById('error_message_register').textContent = 'Make sure that your email is a stud.noroff mail and your password has 8 character.'
         }
