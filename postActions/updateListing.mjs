@@ -18,15 +18,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    const profile = await getProfile(accessToken, username);
-    if (!profile) {
-        alert("Failed to fetch profile.");
+    let profile;
+    try {
+        profile = await getProfile(accessToken, username);
+        if (!profile) {
+            document.body.innerHTML = '<div class="flex justify-center items-center min-h-screen"><p class="text-red-600 text-xl">Failed to fetch profile.</p></div>';
+            return;
+        }
+    } catch (error) {
+        console.error("Error fetching profile:", error);
+        document.body.innerHTML = '<div class="flex justify-center items-center min-h-screen"><p class="text-red-600 text-xl">An error occurred while fetching your profile. Please try again.</p></div>';
         return;
     }
 
-    const userPosts = await getUserPosts(username, accessToken);
-    if (!userPosts || userPosts.length === 0) {
-        alert("No posts found for the user.");
+    let userPosts;
+    try {
+        userPosts = await getUserPosts(username, accessToken);
+        if (!userPosts || userPosts.length === 0) {
+            document.body.innerHTML = '<div class="flex justify-center items-center min-h-screen"><p class="text-red-600 text-xl">No posts found for the user.</p></div>';
+            return;
+        }
+    } catch (error) {
+        console.error("Error fetching user posts:", error);
+        document.body.innerHTML = '<div class="flex justify-center items-center min-h-screen"><p class="text-red-600 text-xl">An error occurred while fetching your posts. Please try again.</p></div>';
         return;
     }
 
