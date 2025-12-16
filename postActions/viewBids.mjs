@@ -2,6 +2,10 @@ export function renderBidList(bids) {
     const bidList = document.createElement("ul");
     bidList.className = "space-y-3 text-sm text-gray-700 dark:text-gray-300";
 
+    if (!bids || !Array.isArray(bids)) {
+        return bidList;
+    }
+
     bids
         .sort((a, b) => new Date(b.created) - new Date(a.created))
         .forEach((bid) => {
